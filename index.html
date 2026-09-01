@@ -83,7 +83,7 @@
 
   <main class="max-w-md mx-auto p-4 space-y-5">
 
-    <!-- ==================== 1. 总览 (Overview) ==================== -->
+    <!-- ==================== 1. 总览 ==================== -->
     <section id="page-overview" class="tab-page space-y-4">
       <div class="cartoon-card-yellow p-5 text-[#2A2E35] space-y-1">
         <p class="text-xs font-bold opacity-80">Hello Lego ZX！今天也要活力满满！</p>
@@ -94,7 +94,6 @@
         </div>
       </div>
 
-      <!-- 数据汇总 -->
       <div class="grid grid-cols-2 gap-3 text-xs font-bold">
         <div class="cartoon-card p-3 flex justify-between items-center">
           <div>
@@ -126,7 +125,6 @@
         </div>
       </div>
 
-      <!-- 日历板块 -->
       <div class="cartoon-card p-4 space-y-3">
         <div class="flex justify-between items-center">
           <h2 class="font-extrabold text-sm flex items-center gap-1.5 text-[#3157A4]">
@@ -161,7 +159,7 @@
       </div>
     </section>
 
-    <!-- ==================== 2. 待办 (Todos) ==================== -->
+    <!-- ==================== 2. 待办 ==================== -->
     <section id="page-todos" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -204,7 +202,7 @@
       </div>
     </section>
 
-    <!-- ==================== 3. 学习 (Study) ==================== -->
+    <!-- ==================== 3. 学习 ==================== -->
     <section id="page-study" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -245,7 +243,7 @@
       </div>
     </section>
 
-    <!-- ==================== 4. 打卡 (Check-in / Habits) ==================== -->
+    <!-- ==================== 4. 打卡 ==================== -->
     <section id="page-habits" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -264,7 +262,7 @@
       </div>
     </section>
 
-    <!-- ==================== 5. 读书 (Reading) ==================== -->
+    <!-- ==================== 5. 读书 ==================== -->
     <section id="page-reading" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -293,7 +291,7 @@
       </div>
     </section>
 
-    <!-- ==================== 6. 运动 (Sports) [新增] ==================== -->
+    <!-- ==================== 6. 运动 ==================== -->
     <section id="page-sports" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -318,7 +316,7 @@
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="text-gray-500">时长 (分钟)</label>
-            <input type="number" id="sport-[#3157A4]" placeholder="45" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+            <input type="number" id="sport-time" placeholder="45" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
           </div>
           <div>
             <label class="text-gray-500">现场/成果照片</label>
@@ -338,7 +336,7 @@
       </div>
     </section>
 
-    <!-- ==================== 7. Movie (电影/剧集) [新增] ==================== -->
+    <!-- ==================== 7. Movie ==================== -->
     <section id="page-movie" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -393,7 +391,83 @@
       </div>
     </section>
 
-    <!-- ==================== 8. 日记 (Diary) ==================== -->
+    <!-- ==================== 8. 记账 (Finance) [新增板块] ==================== -->
+    <section id="page-finance" class="tab-page hidden space-y-4">
+      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
+        <div>
+          <h2 class="font-black text-base text-[#3157A4]">💰 个人记账</h2>
+          <p class="text-xs font-bold text-gray-700">精细记录每一笔收支，理性消费</p>
+        </div>
+        <span class="text-3xl">🪙</span>
+      </div>
+
+      <!-- 新建记账表单 -->
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
+        <div class="flex justify-between items-center">
+          <h3 class="text-slate-700">记一笔账</h3>
+          <button onclick="addCustomCategoryPrompt()" class="text-xs text-[#3157A4] underline">+ 自定义分类</button>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">类型</label>
+            <select id="fin-type" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none bg-white">
+              <option value="expense">🔴 支出</option>
+              <option value="income">🟢 收入</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-500">金额 ($/￥)</label>
+            <input type="number" id="fin-amount" step="0.01" placeholder="0.00" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">账单分类</label>
+            <select id="fin-category" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none bg-white"></select>
+          </div>
+          <div>
+            <label class="text-gray-500">日期</label>
+            <input type="date" id="fin-date" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none bg-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-500">备注说明</label>
+          <input type="text" id="fin-[#3157A4]" placeholder="买午餐 / 领取奖金等..." class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+        </div>
+
+        <button onclick="saveFinanceRecord()" class="cartoon-btn w-full py-2.5">+ 保存记账 (+2积分)</button>
+      </div>
+
+      <!-- Pie Chart 统计表 -->
+      <div class="cartoon-card p-4 space-y-3">
+        <h3 class="font-extrabold text-xs text-slate-700">📊 支出统计饼图 (Pie Chart)</h3>
+        <div class="flex flex-col items-center justify-center p-2 bg-[#FFF2B8] border-2 border-[#2A2E35] rounded-xl">
+          <canvas id="financePieChart" width="180" height="180" class="my-2"></canvas>
+          <div id="pie-legend" class="w-full grid grid-cols-2 gap-1.5 text-[11px] font-bold mt-2"></div>
+        </div>
+      </div>
+
+      <!-- 账单导出 -->
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
+        <h3 class="text-slate-700">📥 账单导出 (CSV)</h3>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="exportFinanceCSV('daily')" class="cartoon-btn py-2 text-xs bg-emerald-100">日账单 (Daily)</button>
+          <button onclick="exportFinanceCSV('weekly')" class="cartoon-btn py-2 text-xs bg-amber-100">周账单 (Weekly)</button>
+          <button onclick="exportFinanceCSV('monthly')" class="cartoon-btn py-2 text-xs bg-blue-100">月账单 (Monthly)</button>
+        </div>
+      </div>
+
+      <!-- 账单明细列表 -->
+      <div class="cartoon-card p-4 space-y-3">
+        <h3 class="font-extrabold text-xs text-slate-700">📜 账单历史明细</h3>
+        <div id="finance-history-list" class="space-y-2 text-xs max-h-60 overflow-y-auto pr-1"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 9. 日记 ==================== -->
     <section id="page-diary" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -439,7 +513,7 @@
       </div>
     </section>
 
-    <!-- ==================== 9. 积分 (Points) ==================== -->
+    <!-- ==================== 10. 积分 ==================== -->
     <section id="page-points" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -470,14 +544,12 @@
         <div id="point-log-list" class="space-y-2 text-xs max-h-64 overflow-y-auto pr-1"></div>
       </div>
 
-      <!-- 奖励小店整合至积分页下方 -->
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <h3 class="font-extrabold text-xs text-slate-800">🎁 兑换心愿单</h3>
         <button onclick="addRewardPrompt()" class="cartoon-btn px-3 py-1 text-xs">+ 添加奖品</button>
       </div>
       <div id="reward-cards" class="grid grid-cols-2 gap-3 text-xs"></div>
 
-      <!-- 数据管理：备份与清零 -->
       <div class="cartoon-card p-4 space-y-3 text-xs font-bold border-dashed">
         <h3 class="text-gray-500">⚙️ 数据管理</h3>
         <div class="flex gap-2">
@@ -490,43 +562,47 @@
 
   </main>
 
-  <!-- 底部固定 Tab 导航栏（按照要求重新排序） -->
+  <!-- 底部固定 Tab 导航栏 (带记账) -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-[#2A2E35] max-w-md mx-auto flex justify-around py-2 z-50 text-center font-bold overflow-x-auto">
-    <button onclick="switchTab('overview')" id="nav-overview" class="flex flex-col items-center px-2 py-1 rounded-xl active-nav-item min-w-[48px]">
+    <button onclick="switchTab('overview')" id="nav-overview" class="flex flex-col items-center px-1.5 py-1 rounded-xl active-nav-item min-w-[42px]">
       <span class="text-base">📊</span>
-      <span class="text-[10px]">总览</span>
+      <span class="text-[9px]">总览</span>
     </button>
-    <button onclick="switchTab('todos')" id="nav-todos" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('todos')" id="nav-todos" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">🎯</span>
-      <span class="text-[10px]">待办</span>
+      <span class="text-[9px]">待办</span>
     </button>
-    <button onclick="switchTab('study')" id="nav-study" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('study')" id="nav-study" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">📚</span>
-      <span class="text-[10px]">学习</span>
+      <span class="text-[9px]">学习</span>
     </button>
-    <button onclick="switchTab('habits')" id="nav-habits" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('habits')" id="nav-habits" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">🌱</span>
-      <span class="text-[10px]">打卡</span>
+      <span class="text-[9px]">打卡</span>
     </button>
-    <button onclick="switchTab('reading')" id="nav-reading" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('reading')" id="nav-reading" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">📖</span>
-      <span class="text-[10px]">读书</span>
+      <span class="text-[9px]">读书</span>
     </button>
-    <button onclick="switchTab('sports')" id="nav-sports" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('sports')" id="nav-sports" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">🏃‍♀️</span>
-      <span class="text-[10px]">运动</span>
+      <span class="text-[9px]">运动</span>
     </button>
-    <button onclick="switchTab('movie')" id="nav-movie" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('movie')" id="nav-movie" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">🎬</span>
-      <span class="text-[10px]">Movie</span>
+      <span class="text-[9px]">Movie</span>
     </button>
-    <button onclick="switchTab('diary')" id="nav-diary" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('finance')" id="nav-finance" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
+      <span class="text-base">💰</span>
+      <span class="text-[9px]">记账</span>
+    </button>
+    <button onclick="switchTab('diary')" id="nav-diary" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">✍️</span>
-      <span class="text-[10px]">日记</span>
+      <span class="text-[9px]">日记</span>
     </button>
-    <button onclick="switchTab('points')" id="nav-points" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+    <button onclick="switchTab('points')" id="nav-points" class="flex flex-col items-center px-1.5 py-1 rounded-xl text-gray-600 min-w-[42px]">
       <span class="text-base">💎</span>
-      <span class="text-[10px]">积分</span>
+      <span class="text-[9px]">积分</span>
     </button>
   </nav>
 
@@ -535,13 +611,12 @@
     const todayStr = new Date().toISOString().split('T')[0];
     let selectedCalendarDate = todayStr;
 
-    // 默认表单日期赋初值
     document.addEventListener("DOMContentLoaded", () => {
       if (document.getElementById('movie-date')) document.getElementById('movie-date').value = todayStr;
       if (document.getElementById('sport-date')) document.getElementById('sport-date').value = todayStr;
+      if (document.getElementById('fin-date')) document.getElementById('fin-date').value = todayStr;
     });
 
-    // 初始状态完全清零
     const initialCleanStore = {
       totalPoints: 0,
       todayPoints: 0,
@@ -553,18 +628,20 @@
       books: [],
       sports: [],
       movies: [],
+      finances: [],
+      finCategories: ["🍜 餐饮", "🛍 购物", "🎮 娱乐", "🚌 交通", "📖 学习"],
       rewards: []
     };
 
-    let store = JSON.parse(localStorage.getItem('lego_zx_data_v7')) || initialCleanStore;
+    let store = JSON.parse(localStorage.getItem('lego_zx_data_v8')) || initialCleanStore;
 
     function saveData() {
-      localStorage.setItem('lego_zx_data_v7', JSON.stringify(store));
+      localStorage.setItem('lego_zx_data_v8', JSON.stringify(store));
       render();
     }
 
     function resetAllData() {
-      if (confirm("⚠️ 确定要清空所有的积分、待办打卡、运动和 Movie 记录吗？此操作不可撤销！")) {
+      if (confirm("⚠️ 确定要清空所有的积分、待办打卡、记账、运动和 Movie 记录吗？此操作不可撤销！")) {
         store = JSON.parse(JSON.stringify(initialCleanStore));
         saveData();
         alert("🧹 所有数据已成功清零！开启全新的自律旅程！");
@@ -627,6 +704,10 @@
         activeBtn.classList.add('active-nav-item');
         activeBtn.classList.remove('text-gray-600');
       }
+
+      if (tabKey === 'finance') {
+        renderFinancePieChart();
+      }
     }
 
     function switchTodoView(viewType) {
@@ -650,7 +731,6 @@
       render();
     }
 
-    // 辅助图片转 Base64 编码
     function getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -660,7 +740,160 @@
       });
     }
 
-    // 保存运动记录
+    // ==================== 记账功能逻辑 ====================
+    function addCustomCategoryPrompt() {
+      const cat = prompt("输入新分类名称 (可加 Emoji，例: ☕️ 咖啡):");
+      if (cat && cat.trim()) {
+        if (!store.finCategories.includes(cat.trim())) {
+          store.finCategories.push(cat.trim());
+          saveData();
+        }
+      }
+    }
+
+    function saveFinanceRecord() {
+      const type = document.getElementById('fin-type').value;
+      const amount = parseFloat(document.getElementById('fin-amount').value);
+      const category = document.getElementById('fin-category').value;
+      const date = document.getElementById('fin-date').value || todayStr;
+      const note = document.getElementById('fin-[#3157A4]').value.trim();
+
+      if (isNaN(amount) || amount <= 0) {
+        alert("请输入有效的金额！");
+        return;
+      }
+
+      store.finances.unshift({
+        id: Date.now(),
+        type,
+        amount,
+        category,
+        date,
+        note
+      });
+
+      document.getElementById('fin-amount').value = "";
+      document.getElementById('fin-[#3157A4]').value = "";
+
+      addPointLog(`[记账] ${category} ${amount}元`, 2);
+      saveData();
+    }
+
+    function deleteFinanceRecord(id) {
+      store.finances = store.finances.filter(f => f.id !== id);
+      saveData();
+    }
+
+    // Canvas 绘制动态饼图 (Pie Chart)
+    function renderFinancePieChart() {
+      const canvas = document.getElementById('financePieChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const expenses = store.finances.filter(f => f.type === 'expense');
+      const categoryTotals = {};
+      let totalExpense = 0;
+
+      expenses.forEach(item => {
+        categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
+        totalExpense += item.amount;
+      });
+
+      const legendBox = document.getElementById('pie-legend');
+
+      if (totalExpense === 0) {
+        ctx.fillStyle = '#E5E7EB';
+        ctx.beginPath();
+        ctx.arc(90, 90, 80, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#9CA3AF';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('暂无支出', 90, 95);
+        if (legendBox) legendBox.innerHTML = '<p class="text-gray-400 text-center col-span-2">尚无支出分类数据</p>';
+        return;
+      }
+
+      const colors = ['#F87171', '#60A5FA', '#FBBF24', '#34D399', '#A78BFA', '#F472B6', '#F97316'];
+      let startAngle = 0;
+      let legendHTML = '';
+      let colorIdx = 0;
+
+      for (const [cat, amt] of Object.entries(categoryTotals)) {
+        const sliceAngle = (amt / totalExpense) * (Math.PI * 2);
+        const currentColor = colors[colorIdx % colors.length];
+
+        ctx.fillStyle = currentColor;
+        ctx.beginPath();
+        ctx.moveTo(90, 90);
+        ctx.arc(90, 90, 80, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#2A2E35';
+        ctx.stroke();
+
+        const pct = Math.round((amt / totalExpense) * 100);
+        legendHTML += `
+          <div class="flex items-center gap-1.5 bg-white p-1 rounded-md border border-[#2A2E35]">
+            <span class="w-3 h-3 rounded-full border border-[#2A2E35]" style="background:${currentColor}"></span>
+            <span class="truncate flex-1">${cat}</span>
+            <span class="text-gray-500">${pct}%</span>
+          </div>
+        `;
+
+        startAngle += sliceAngle;
+        colorIdx++;
+      }
+
+      if (legendBox) legendBox.innerHTML = legendHTML;
+    }
+
+    // 导出 CSV (Daily, Weekly, Monthly)
+    function exportFinanceCSV(range) {
+      if (store.finances.length === 0) {
+        alert("目前没有可以导出的记账数据！");
+        return;
+      }
+
+      const now = new Date();
+      let filtered = store.finances;
+
+      if (range === 'daily') {
+        filtered = store.finances.filter(f => f.date === todayStr);
+      } else if (range === 'weekly') {
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        filtered = store.finances.filter(f => f.date >= sevenDaysAgo);
+      } else if (range === 'monthly') {
+        const currentMonth = todayStr.substring(0, 7);
+        filtered = store.finances.filter(f => f.date.startsWith(currentMonth));
+      }
+
+      if (filtered.length === 0) {
+        alert(`未找到 [${range}] 范围内的记账记录！`);
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+      csvContent += "日期,类型,分类,金额,备注\n";
+
+      filtered.forEach(item => {
+        const typeText = item.type === 'expense' ? '支出' : '收入';
+        csvContent += `${item.date},${typeText},${item.category},${item.amount},"${item.note || ''}"\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `LegoZX_账单_${range}_${todayStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // 运动记录
     async function saveSportRecord() {
       const date = document.getElementById('sport-date').value || todayStr;
       const name = document.getElementById('sport-name').value.trim();
@@ -700,7 +933,7 @@
       saveData();
     }
 
-    // 保存 Movie 记录
+    // Movie 记录
     async function saveMovieRecord() {
       const date = document.getElementById('movie-date').value || todayStr;
       const name = document.getElementById('movie-name').value.trim();
@@ -831,7 +1064,7 @@
       saveData();
     }
 
-    // 打卡 (Habits)
+    // 打卡
     function toggleHabit(id) {
       const habit = store.habits.find(h => h.id === id);
       if (habit) {
@@ -1007,6 +1240,38 @@
 
       renderCalendar();
       renderSelectedDateDetails();
+
+      // 渲染记账分类下拉框
+      const catSelect = document.getElementById('fin-category');
+      if (catSelect) {
+        catSelect.innerHTML = store.finCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+      }
+
+      // 渲染记账列表
+      const finBox = document.getElementById('finance-history-list');
+      if (store.finances && store.finances.length > 0) {
+        finBox.innerHTML = store.finances.map(f => `
+          <div class="flex justify-between items-center p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl font-bold">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs">${f.category}</span>
+                <span class="text-[10px] text-gray-400">📅 ${f.date}</span>
+              </div>
+              ${f.note ? `<p class="text-[10px] text-gray-500 font-normal">💬 ${f.note}</p>` : ''}
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="${f.type === 'expense' ? 'text-red-500' : 'text-emerald-600'} font-black text-sm">
+                ${f.type === 'expense' ? '-' : '+'}$${f.amount.toFixed(2)}
+              </span>
+              <button onclick="deleteFinanceRecord(${f.id})" class="text-gray-300 hover:text-red-500">×</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        finBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">暂无记账明细</p>';
+      }
+
+      renderFinancePieChart();
 
       // 运动列表渲染
       const sportBox = document.getElementById('sport-history-list');
