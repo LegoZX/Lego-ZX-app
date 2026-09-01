@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lego ZX 自律工作台 & 积分管理系统</title>
+  <title>Lego ZX 自律工作台</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-yellow: #FFF2B8;      /* 全局主背景 */
-      --card-yellow: #F2C94C;    /* 卡片与主按钮 */
-      --nav-blue: #3157A4;       /* 顶部导航与选中 */
-      --sub-blue: #7AA6C2;       /* 次要组件 */
-      --dark-stroke: #2A2E35;    /* 轮廓线 */
+      --bg-yellow: #FFF2B8;
+      --card-yellow: #F2C94C;
+      --nav-blue: #3157A4;
+      --sub-blue: #7AA6C2;
+      --dark-stroke: #2A2E35;
     }
 
     body {
@@ -73,6 +73,7 @@
 </head>
 <body class="pb-28">
 
+  <!-- 顶部 Header -->
   <header class="bg-[#3157A4] text-white border-b-4 border-[#2A2E35] sticky top-0 z-40 px-4 py-3 flex justify-between items-center">
     <span class="font-extrabold text-base tracking-wide flex items-center gap-1.5">
       <span>🧱</span> Lego ZX
@@ -82,16 +83,18 @@
 
   <main class="max-w-md mx-auto p-4 space-y-5">
 
+    <!-- ==================== 1. 总览 (Overview) ==================== -->
     <section id="page-overview" class="tab-page space-y-4">
       <div class="cartoon-card-yellow p-5 text-[#2A2E35] space-y-1">
         <p class="text-xs font-bold opacity-80">Hello Lego ZX！今天也要活力满满！</p>
         <h1 id="clock-display" class="text-4xl font-black tracking-tight">--:--</h1>
         <p class="text-xs font-bold" id="date-display">2026年9月1日</p>
         <div class="mt-3 bg-white p-2.5 rounded-xl border-2 border-[#2A2E35] text-xs font-bold text-[#3157A4]">
-          “每一份坚持，都是在向更好的自己靠拢！”
+          “全新的开始，一步步实现你的目标！”
         </div>
       </div>
 
+      <!-- 数据汇总 -->
       <div class="grid grid-cols-2 gap-3 text-xs font-bold">
         <div class="cartoon-card p-3 flex justify-between items-center">
           <div>
@@ -123,6 +126,7 @@
         </div>
       </div>
 
+      <!-- 日历板块 -->
       <div class="cartoon-card p-4 space-y-3">
         <div class="flex justify-between items-center">
           <h2 class="font-extrabold text-sm flex items-center gap-1.5 text-[#3157A4]">
@@ -157,6 +161,7 @@
       </div>
     </section>
 
+    <!-- ==================== 2. 待办 (Todos) ==================== -->
     <section id="page-todos" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -175,7 +180,7 @@
         <div id="todo-matrix-view" class="space-y-3 text-xs pt-1">
           <div class="grid grid-cols-2 gap-2">
             <div class="bg-red-50 border-2 border-[#2A2E35] p-2 rounded-xl">
-              <span class="font-black text-red-500">🔴 紧急且重要</span>
+              <span class="font-black text-red-500">🔴 紧急重要</span>
               <div id="quad-1" class="mt-2 space-y-1.5"></div>
             </div>
             <div class="bg-amber-50 border-2 border-[#2A2E35] p-2 rounded-xl">
@@ -199,37 +204,196 @@
       </div>
     </section>
 
-    <section id="page-points" class="tab-page hidden space-y-4">
+    <!-- ==================== 3. 学习 (Study) ==================== -->
+    <section id="page-study" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
-          <h2 class="font-black text-base text-[#3157A4]">💎 积分中心</h2>
-          <p class="text-xs font-bold text-gray-700">实时查看与管理每一笔积分明细</p>
+          <h2 class="font-black text-base text-[#3157A4]">📚 学习打卡</h2>
+          <p class="text-xs font-bold text-gray-700">记录专注时刻，赚取自律积分</p>
         </div>
-        <button onclick="manualAdjustPoints()" class="cartoon-btn px-3 py-1.5 text-xs bg-red-400 text-white">⚙️ 手动增减</button>
+        <span class="text-3xl">✏️</span>
       </div>
 
-      <div class="cartoon-card p-4 space-y-3">
-        <h2 class="font-extrabold text-sm flex items-center gap-1.5 text-[#3157A4]">
-          <span>📊</span> 积分概况
-        </h2>
-        <div class="grid grid-cols-2 gap-2 text-center bg-[#FFF2B8] p-3 rounded-xl border-2 border-[#2A2E35]">
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
+        <h3 class="text-slate-700">记录一笔学习</h3>
+        <div class="grid grid-cols-3 gap-2">
           <div>
-            <p class="text-xs text-gray-600 font-bold">总可用积分</p>
-            <p id="points-tab-total" class="text-2xl font-black text-[#3157A4]">0</p>
+            <label class="text-gray-500">图标</label>
+            <input type="text" id="study-icon" value="📝" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl text-center outline-none">
           </div>
-          <div>
-            <p class="text-xs text-gray-600 font-bold">今日净获得</p>
-            <p id="points-tab-today" class="text-2xl font-black text-amber-500">0</p>
+          <div class="col-span-2">
+            <label class="text-gray-500">科目 / 内容</label>
+            <input type="text" id="study-subject" placeholder="英语单词 / 数学测试" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
           </div>
         </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">时长 (分钟)</label>
+            <input type="number" id="study-time" placeholder="45" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="text-gray-500">获得积分</label>
+            <input type="number" id="study-pts" value="15" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+        </div>
+        <button onclick="recordStudy()" class="cartoon-btn w-full py-2.5">+ 记入今日打卡</button>
       </div>
 
-      <div class="cartoon-card p-4 space-y-3">
-        <h2 class="font-extrabold text-sm text-[#3157A4]">📜 积分变动明细列表</h2>
-        <div id="point-log-list" class="space-y-2 text-xs max-h-80 overflow-y-auto pr-1"></div>
+      <div class="cartoon-card p-4 space-y-2 text-xs">
+        <h3 class="font-extrabold text-slate-700">今日学习记录</h3>
+        <div id="study-history" class="space-y-2"></div>
       </div>
     </section>
 
+    <!-- ==================== 4. 打卡 (Check-in / Habits) ==================== -->
+    <section id="page-habits" class="tab-page hidden space-y-4">
+      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
+        <div>
+          <h2 class="font-black text-base text-[#3157A4]">🌱 习惯打卡</h2>
+          <p class="text-xs font-bold text-gray-700">微小的习惯，巨大的改变</p>
+        </div>
+        <span class="text-3xl">🌿</span>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-extrabold text-xs text-slate-700">日常打卡项目</h3>
+          <button onclick="addNewHabitPrompt()" class="cartoon-btn px-3 py-1 text-xs">+ 新建打卡</button>
+        </div>
+        <div id="habit-list" class="space-y-2 text-xs"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. 读书 (Reading) ==================== -->
+    <section id="page-reading" class="tab-page hidden space-y-4">
+      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
+        <div>
+          <h2 class="font-black text-base text-[#3157A4]">📖 读书进度</h2>
+          <p class="text-xs font-bold text-gray-700">记录阅读页数与心得</p>
+        </div>
+        <span class="text-3xl">📘</span>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
+        <h3 class="text-slate-700">更新书本进度</h3>
+        <div class="flex gap-2">
+          <input type="text" id="book-icon" value="📖" class="w-12 p-2 border-2 border-[#2A2E35] rounded-xl text-center outline-none">
+          <input type="text" id="book-title" placeholder="书名" class="flex-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="number" id="book-total-pages" placeholder="总页数 (例 350)" class="p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          <input type="number" id="book-read-pages" placeholder="已读页数" class="p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+        </div>
+        <button onclick="addBookProgress()" class="cartoon-btn w-full py-2.5">更新阅读数据 (+5积分)</button>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3">
+        <h3 class="font-extrabold text-xs text-slate-700">当前书架</h3>
+        <div id="book-list" class="space-y-3 text-xs"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. 运动 (Sports) [新增] ==================== -->
+    <section id="page-sports" class="tab-page hidden space-y-4">
+      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
+        <div>
+          <h2 class="font-black text-base text-[#3157A4]">🏃‍♀️ 运动打卡</h2>
+          <p class="text-xs font-bold text-gray-700">生命在于运动，记录汗水与蜕变</p>
+        </div>
+        <span class="text-3xl">⚽️</span>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
+        <h3 class="text-slate-700">添加运动记录</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">运动日期</label>
+            <input type="date" id="sport-date" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none bg-white">
+          </div>
+          <div>
+            <label class="text-gray-500">运动项目</label>
+            <input type="text" id="sport-name" placeholder="例：跑步/羽毛球" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">时长 (分钟)</label>
+            <input type="number" id="sport-[#3157A4]" placeholder="45" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="text-gray-500">现场/成果照片</label>
+            <input type="file" id="sport-photo" accept="image/*" class="w-full mt-1 text-[10px] text-gray-500 border-2 border-[#2A2E35] rounded-xl p-1 bg-white">
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-500">运动感言</label>
+          <textarea id="sport-comment" rows="2" placeholder="今天运动状态超棒！坚持到底！..." class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none resize-none"></textarea>
+        </div>
+        <button onclick="saveSportRecord()" class="cartoon-btn w-full py-2.5">+ 保存运动记录 (+15积分)</button>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3">
+        <h3 class="font-extrabold text-xs text-slate-700">运动历史轨迹</h3>
+        <div id="sport-history-list" class="space-y-3 text-xs"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. Movie (电影/剧集) [新增] ==================== -->
+    <section id="page-movie" class="tab-page hidden space-y-4">
+      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
+        <div>
+          <h2 class="font-black text-base text-[#3157A4]">🎬 Movie 观影房</h2>
+          <p class="text-xs font-bold text-gray-700">记录看过的电影、存留电影票与心路历程</p>
+        </div>
+        <span class="text-3xl">🍿</span>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
+        <h3 class="text-slate-700">记录一部影视作品</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">观影日期</label>
+            <input type="date" id="movie-date" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none bg-white">
+          </div>
+          <div>
+            <label class="text-gray-500">电影/剧集名称</label>
+            <input type="text" id="movie-name" placeholder="电影名称" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-gray-500">时长 (分钟)</label>
+            <input type="number" id="movie-duration" placeholder="120" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="text-gray-500">星级评分</label>
+            <select id="movie-rating" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none bg-white">
+              <option value="⭐️⭐️⭐️⭐️⭐️">⭐️⭐️⭐️⭐️⭐️ (推荐)</option>
+              <option value="⭐️⭐️⭐️⭐️">⭐️⭐️⭐️⭐️ (好看)</option>
+              <option value="⭐️⭐️⭐️">⭐️⭐️⭐️ (一般)</option>
+              <option value="⭐️⭐️">⭐️⭐️ (差强人意)</option>
+              <option value="⭐️">⭐️ (踩雷)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-500">电影票 / 剧照上传</label>
+          <input type="file" id="movie-photo" accept="image/*" class="w-full mt-1 text-[10px] text-gray-500 border-2 border-[#2A2E35] rounded-xl p-1 bg-white">
+        </div>
+        <div>
+          <label class="text-gray-500">影评与感想</label>
+          <textarea id="movie-review" rows="3" placeholder="这部电影最打动我的是..." class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none resize-none"></textarea>
+        </div>
+        <button onclick="saveMovieRecord()" class="cartoon-btn w-full py-2.5">+ 保存观影记录 (+10积分)</button>
+      </div>
+
+      <div class="cartoon-card p-4 space-y-3">
+        <h3 class="font-extrabold text-xs text-slate-700">观影手帐</h3>
+        <div id="movie-history-list" class="space-y-3 text-xs"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 8. 日记 (Diary) ==================== -->
     <section id="page-diary" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
@@ -275,151 +439,94 @@
       </div>
     </section>
 
-    <section id="page-study" class="tab-page hidden space-y-4">
+    <!-- ==================== 9. 积分 (Points) ==================== -->
+    <section id="page-points" class="tab-page hidden space-y-4">
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
         <div>
-          <h2 class="font-black text-base text-[#3157A4]">📚 学习打卡</h2>
-          <p class="text-xs font-bold text-gray-700">记录专注时刻，赚取自律积分</p>
+          <h2 class="font-black text-base text-[#3157A4]">💎 积分中心</h2>
+          <p class="text-xs font-bold text-gray-700">实时查看与管理每一笔积分明细</p>
         </div>
-        <span class="text-3xl">✏️</span>
-      </div>
-
-      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
-        <h3 class="text-slate-700">记录一笔学习</h3>
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="text-gray-500">图标</label>
-            <input type="text" id="study-icon" value="📝" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl text-center outline-none">
-          </div>
-          <div class="col-span-2">
-            <label class="text-gray-500">科目 / 内容</label>
-            <input type="text" id="study-subject" placeholder="英语单词 / 数学测试" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="text-gray-500">时长 (分钟)</label>
-            <input type="number" id="study-time" placeholder="45" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
-          </div>
-          <div>
-            <label class="text-gray-500">获得积分</label>
-            <input type="number" id="study-pts" value="15" class="w-full mt-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
-          </div>
-        </div>
-        <button onclick="recordStudy()" class="cartoon-btn w-full py-2.5">+ 记入今日打卡</button>
-      </div>
-
-      <div class="cartoon-card p-4 space-y-2 text-xs">
-        <h3 class="font-extrabold text-slate-700">今日学习记录</h3>
-        <div id="study-history" class="space-y-2"></div>
-      </div>
-    </section>
-
-    <section id="page-habits" class="tab-page hidden space-y-4">
-      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
-        <div>
-          <h2 class="font-black text-base text-[#3157A4]">🌱 习惯打卡</h2>
-          <p class="text-xs font-bold text-gray-700">微小的习惯，巨大的改变</p>
-        </div>
-        <span class="text-3xl">🌿</span>
+        <button onclick="manualAdjustPoints()" class="cartoon-btn px-3 py-1.5 text-xs bg-red-400 text-white">⚙️ 手动增减</button>
       </div>
 
       <div class="cartoon-card p-4 space-y-3">
-        <div class="flex justify-between items-center">
-          <h3 class="font-extrabold text-xs text-slate-700">打卡项目列表</h3>
-          <button onclick="addNewHabitPrompt()" class="cartoon-btn px-3 py-1 text-xs">+ 新建习惯</button>
+        <h2 class="font-extrabold text-sm flex items-center gap-1.5 text-[#3157A4]">
+          <span>📊</span> 积分概况
+        </h2>
+        <div class="grid grid-cols-2 gap-2 text-center bg-[#FFF2B8] p-3 rounded-xl border-2 border-[#2A2E35]">
+          <div>
+            <p class="text-xs text-gray-600 font-bold">总可用积分</p>
+            <p id="points-tab-total" class="text-2xl font-black text-[#3157A4]">0</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-600 font-bold">今日净获得</p>
+            <p id="points-tab-today" class="text-2xl font-black text-amber-500">0</p>
+          </div>
         </div>
-        <div id="habit-list" class="space-y-2 text-xs"></div>
-      </div>
-    </section>
-
-    <section id="page-reading" class="tab-page hidden space-y-4">
-      <div class="cartoon-card-yellow p-4 flex justify-between items-center">
-        <div>
-          <h2 class="font-black text-base text-[#3157A4]">📖 读书进度</h2>
-          <p class="text-xs font-bold text-gray-700">记录阅读页数与心得</p>
-        </div>
-        <span class="text-3xl">📘</span>
-      </div>
-
-      <div class="cartoon-card p-4 space-y-3 text-xs font-bold">
-        <h3 class="text-slate-700">更新书本进度</h3>
-        <div class="flex gap-2">
-          <input type="text" id="book-icon" value="📖" class="w-12 p-2 border-2 border-[#2A2E35] rounded-xl text-center outline-none">
-          <input type="text" id="book-title" placeholder="书名" class="flex-1 p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="number" id="book-total-pages" placeholder="总页数 (例 350)" class="p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
-          <input type="number" id="book-read-pages" placeholder="已读页数" class="p-2 border-2 border-[#2A2E35] rounded-xl outline-none">
-        </div>
-        <button onclick="addBookProgress()" class="cartoon-btn w-full py-2.5">更新阅读数据 (+5积分)</button>
       </div>
 
       <div class="cartoon-card p-4 space-y-3">
-        <h3 class="font-extrabold text-xs text-slate-700">当前书架</h3>
-        <div id="book-list" class="space-y-3 text-xs"></div>
+        <h2 class="font-extrabold text-sm text-[#3157A4]">📜 积分变动明细列表</h2>
+        <div id="point-log-list" class="space-y-2 text-xs max-h-64 overflow-y-auto pr-1"></div>
       </div>
-    </section>
 
-    <section id="page-rewards" class="tab-page hidden space-y-4">
+      <!-- 奖励小店整合至积分页下方 -->
       <div class="cartoon-card-yellow p-4 flex justify-between items-center">
-        <div>
-          <h2 class="font-black text-base text-[#3157A4]">🎁 奖励小店</h2>
-          <p class="text-xs font-bold text-gray-700">兑换你的专属奖品！</p>
-        </div>
-        <span class="text-3xl">🛍️</span>
-      </div>
-
-      <div class="flex justify-between items-center">
-        <h3 class="font-extrabold text-xs text-slate-700">心愿单</h3>
+        <h3 class="font-extrabold text-xs text-slate-800">🎁 兑换心愿单</h3>
         <button onclick="addRewardPrompt()" class="cartoon-btn px-3 py-1 text-xs">+ 添加奖品</button>
       </div>
-
       <div id="reward-cards" class="grid grid-cols-2 gap-3 text-xs"></div>
 
-      <div class="cartoon-card p-4 space-y-2 text-xs font-bold border-dashed">
-        <h3 class="text-gray-500">💾 数据备份与防丢失</h3>
+      <!-- 数据管理：备份与清零 -->
+      <div class="cartoon-card p-4 space-y-3 text-xs font-bold border-dashed">
+        <h3 class="text-gray-500">⚙️ 数据管理</h3>
         <div class="flex gap-2">
-          <button onclick="exportData()" class="cartoon-btn flex-1 py-1.5 text-xs bg-slate-200">📥 备份数据</button>
-          <button onclick="importData()" class="cartoon-btn flex-1 py-1.5 text-xs bg-slate-200">📤 恢复数据</button>
+          <button onclick="exportData()" class="cartoon-btn flex-1 py-1.5 text-xs bg-slate-200">📥 备份</button>
+          <button onclick="importData()" class="cartoon-btn flex-1 py-1.5 text-xs bg-slate-200">📤 恢复</button>
         </div>
+        <button onclick="resetAllData()" class="cartoon-btn w-full py-2 text-xs bg-red-500 text-white">⚠️ 彻底重置清零</button>
       </div>
     </section>
 
   </main>
 
+  <!-- 底部固定 Tab 导航栏（按照要求重新排序） -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-[#2A2E35] max-w-md mx-auto flex justify-around py-2 z-50 text-center font-bold overflow-x-auto">
-    <button onclick="switchTab('overview')" id="nav-overview" class="flex flex-col items-center px-2 py-1 rounded-xl active-nav-item min-w-[50px]">
+    <button onclick="switchTab('overview')" id="nav-overview" class="flex flex-col items-center px-2 py-1 rounded-xl active-nav-item min-w-[48px]">
       <span class="text-base">📊</span>
       <span class="text-[10px]">总览</span>
     </button>
-    <button onclick="switchTab('todos')" id="nav-todos" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
+    <button onclick="switchTab('todos')" id="nav-todos" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
       <span class="text-base">🎯</span>
       <span class="text-[10px]">待办</span>
     </button>
-    <button onclick="switchTab('points')" id="nav-points" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
-      <span class="text-base">💎</span>
-      <span class="text-[10px]">积分</span>
-    </button>
-    <button onclick="switchTab('diary')" id="nav-diary" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
-      <span class="text-base">✍️</span>
-      <span class="text-[10px]">日记</span>
-    </button>
-    <button onclick="switchTab('study')" id="nav-study" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
+    <button onclick="switchTab('study')" id="nav-study" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
       <span class="text-base">📚</span>
       <span class="text-[10px]">学习</span>
     </button>
-    <button onclick="switchTab('habits')" id="nav-habits" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
+    <button onclick="switchTab('habits')" id="nav-habits" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
       <span class="text-base">🌱</span>
-      <span class="text-[10px]">习惯</span>
+      <span class="text-[10px]">打卡</span>
     </button>
-    <button onclick="switchTab('reading')" id="nav-reading" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
+    <button onclick="switchTab('reading')" id="nav-reading" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
       <span class="text-base">📖</span>
       <span class="text-[10px]">读书</span>
     </button>
-    <button onclick="switchTab('rewards')" id="nav-rewards" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[50px]">
-      <span class="text-base">🎁</span>
-      <span class="text-[10px]">奖励</span>
+    <button onclick="switchTab('sports')" id="nav-sports" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+      <span class="text-base">🏃‍♀️</span>
+      <span class="text-[10px]">运动</span>
+    </button>
+    <button onclick="switchTab('movie')" id="nav-movie" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+      <span class="text-base">🎬</span>
+      <span class="text-[10px]">Movie</span>
+    </button>
+    <button onclick="switchTab('diary')" id="nav-diary" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+      <span class="text-base">✍️</span>
+      <span class="text-[10px]">日记</span>
+    </button>
+    <button onclick="switchTab('points')" id="nav-points" class="flex flex-col items-center px-2 py-1 rounded-xl text-gray-600 min-w-[48px]">
+      <span class="text-base">💎</span>
+      <span class="text-[10px]">积分</span>
     </button>
   </nav>
 
@@ -428,37 +535,40 @@
     const todayStr = new Date().toISOString().split('T')[0];
     let selectedCalendarDate = todayStr;
 
-    let store = JSON.parse(localStorage.getItem('lego_zx_data_v5')) || {
-      totalPoints: 240,
+    // 默认表单日期赋初值
+    document.addEventListener("DOMContentLoaded", () => {
+      if (document.getElementById('movie-date')) document.getElementById('movie-date').value = todayStr;
+      if (document.getElementById('sport-date')) document.getElementById('sport-date').value = todayStr;
+    });
+
+    // 初始状态完全清零
+    const initialCleanStore = {
+      totalPoints: 0,
       todayPoints: 0,
-      pointLogs: [
-        { id: 1, source: "系统初始积分", amount: 240, date: todayStr, time: "10:00" }
-      ],
-      todos: [
-        { id: 1, icon: "🔥", title: "完成英语阅读理解", quad: 1, time: "18:00", done: false, pts: 20, date: todayStr },
-        { id: 2, icon: "🏃‍♀️", title: "夜跑 3 公里", quad: 2, time: "20:00", done: false, pts: 15, date: todayStr },
-        { id: 3, icon: "🧹", title: "清理书桌收拾房间", quad: 4, time: "21:30", done: true, pts: 10, date: todayStr }
-      ],
-      diaries: [
-        { id: 1, mood: "😊 开心", weather: "☀️ 晴朗", content: "今天开启了全新的 Lego ZX 工作台！感到动力满满！", date: todayStr }
-      ],
+      pointLogs: [],
+      todos: [],
+      diaries: [],
       studies: [],
-      habits: [
-        { id: 1, icon: "🥛", name: "早起喝水 500ml", pts: 10, done: false },
-        { id: 2, icon: "🧘‍♀️", name: "睡前拉伸", pts: 10, done: false }
-      ],
-      books: [
-        { id: 1, icon: "📘", title: "自控力", read: 140, total: 280 }
-      ],
-      rewards: [
-        { id: 1, icon: "🥤", name: "冰奶茶一杯", cost: 150 },
-        { id: 2, icon: "🎮", name: "看电影两小时", cost: 300 }
-      ]
+      habits: [],
+      books: [],
+      sports: [],
+      movies: [],
+      rewards: []
     };
 
+    let store = JSON.parse(localStorage.getItem('lego_zx_data_v7')) || initialCleanStore;
+
     function saveData() {
-      localStorage.setItem('lego_zx_data_v5', JSON.stringify(store));
+      localStorage.setItem('lego_zx_data_v7', JSON.stringify(store));
       render();
+    }
+
+    function resetAllData() {
+      if (confirm("⚠️ 确定要清空所有的积分、待办打卡、运动和 Movie 记录吗？此操作不可撤销！")) {
+        store = JSON.parse(JSON.stringify(initialCleanStore));
+        saveData();
+        alert("🧹 所有数据已成功清零！开启全新的自律旅程！");
+      }
     }
 
     function addPointLog(source, amount) {
@@ -485,7 +595,7 @@
     }
 
     function manualAdjustPoints() {
-      const reason = prompt("请输入调整原因 (例：玩手机扣分 / 额外奖励):", "手动调整");
+      const reason = prompt("请输入调整原因:", "手动调整");
       if (!reason) return;
       const amount = parseInt(prompt("请输入变动数值 (扣分为负数，例: -20 或 50):", "-10"));
       if (isNaN(amount) || amount === 0) return;
@@ -540,7 +650,99 @@
       render();
     }
 
-    // 日记功能
+    // 辅助图片转 Base64 编码
+    function getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    // 保存运动记录
+    async function saveSportRecord() {
+      const date = document.getElementById('sport-date').value || todayStr;
+      const name = document.getElementById('sport-name').value.trim();
+      const duration = document.getElementById('sport-time').value || 30;
+      const comment = document.getElementById('sport-comment').value.trim();
+      const photoFile = document.getElementById('sport-photo').files[0];
+
+      if (!name) {
+        alert("请输入运动项目名称！");
+        return;
+      }
+
+      let photoData = "";
+      if (photoFile) {
+        photoData = await getBase64(photoFile);
+      }
+
+      store.sports.unshift({
+        id: Date.now(),
+        date,
+        name,
+        duration,
+        comment,
+        photo: photoData
+      });
+
+      document.getElementById('sport-name').value = "";
+      document.getElementById('sport-comment').value = "";
+      document.getElementById('sport-photo').value = "";
+
+      addPointLog(`[运动打卡] ${name}`, 15);
+      saveData();
+    }
+
+    function deleteSport(id) {
+      store.sports = store.sports.filter(s => s.id !== id);
+      saveData();
+    }
+
+    // 保存 Movie 记录
+    async function saveMovieRecord() {
+      const date = document.getElementById('movie-date').value || todayStr;
+      const name = document.getElementById('movie-name').value.trim();
+      const duration = document.getElementById('movie-duration').value || 120;
+      const rating = document.getElementById('movie-rating').value;
+      const review = document.getElementById('movie-review').value.trim();
+      const photoFile = document.getElementById('movie-photo').files[0];
+
+      if (!name) {
+        alert("请输入电影/剧集名称！");
+        return;
+      }
+
+      let photoData = "";
+      if (photoFile) {
+        photoData = await getBase64(photoFile);
+      }
+
+      store.movies.unshift({
+        id: Date.now(),
+        date,
+        name,
+        duration,
+        rating,
+        review,
+        photo: photoData
+      });
+
+      document.getElementById('movie-name').value = "";
+      document.getElementById('movie-review').value = "";
+      document.getElementById('movie-photo').value = "";
+
+      addPointLog(`[观影手帐] ${name}`, 10);
+      saveData();
+    }
+
+    function deleteMovie(id) {
+      store.movies = store.movies.filter(m => m.id !== id);
+      saveData();
+    }
+
+    // 日记
     function saveDiary() {
       const mood = document.getElementById('diary-mood').value;
       const weather = document.getElementById('diary-weather').value;
@@ -562,7 +764,6 @@
       addPointLog(`[日记] 写日记打卡`, 5);
       saveData();
     }
-
     function deleteDiary(id) {
       store.diaries = store.diaries.filter(d => d.id !== id);
       saveData();
@@ -602,7 +803,6 @@
         saveData();
       }
     }
-
     function deleteTodo(id) {
       store.todos = store.todos.filter(t => t.id !== id);
       saveData();
@@ -631,22 +831,22 @@
       saveData();
     }
 
-    // 习惯
+    // 打卡 (Habits)
     function toggleHabit(id) {
       const habit = store.habits.find(h => h.id === id);
       if (habit) {
         habit.done = !habit.done;
         if (habit.done) {
-          addPointLog(`[习惯] ${habit.name}`, habit.pts);
+          addPointLog(`[打卡] ${habit.name}`, habit.pts);
         } else {
-          addPointLog(`[取消习惯] ${habit.name}`, -habit.pts);
+          addPointLog(`[取消打卡] ${habit.name}`, -habit.pts);
         }
         saveData();
       }
     }
     function addNewHabitPrompt() {
       const icon = prompt("图标 Emoji:", "🌱") || "🌱";
-      const name = prompt("习惯名称:", "");
+      const name = prompt("打卡名称:", "");
       if (name) {
         store.habits.push({ id: Date.now(), icon, name, pts: 10, done: false });
         saveData();
@@ -703,7 +903,6 @@
       saveData();
     }
 
-    // 备份与导入
     function exportData() {
       const jsonStr = JSON.stringify(store);
       navigator.clipboard.writeText(jsonStr).then(() => {
@@ -726,7 +925,6 @@
       }
     }
 
-    // 日历渲染逻辑
     function renderCalendar() {
       const now = new Date();
       const year = now.getFullYear();
@@ -739,7 +937,6 @@
       const gridBox = document.getElementById('calendar-grid');
       gridBox.innerHTML = '';
 
-      // 填充空白
       for (let i = 0; i < firstDay; i++) {
         gridBox.innerHTML += `<div></div>`;
       }
@@ -764,7 +961,6 @@
     function renderSelectedDateDetails() {
       document.getElementById('selected-date-label').innerText = selectedCalendarDate === todayStr ? '今日' : selectedCalendarDate;
       
-      // 筛选当天待办
       const dayTodos = store.todos.filter(t => t.date === selectedCalendarDate);
       const todoBox = document.getElementById('calendar-todo-list');
       if (dayTodos.length > 0) {
@@ -775,10 +971,9 @@
           </div>
         `).join('');
       } else {
-        todoBox.innerHTML = '<p class="text-gray-400 italic text-[11px]">当天没有新增待办</p>';
+        todoBox.innerHTML = '<p class="text-gray-400 italic text-[11px]">当天没有事项</p>';
       }
 
-      // 筛选当天积分变动与计算
       const dayLogs = store.pointLogs.filter(l => l.date === selectedCalendarDate);
       const logBox = document.getElementById('calendar-point-list');
       let daySum = 0;
@@ -794,13 +989,12 @@
           `;
         }).join('');
       } else {
-        logBox.innerHTML = '<p class="text-gray-400 italic text-[11px]">当天没有积分变动记录</p>';
+        logBox.innerHTML = '<p class="text-gray-400 italic text-[11px]">当天没有积分记录</p>';
       }
 
       document.getElementById('selected-date-pts-badge').innerText = `积分: ${daySum >= 0 ? '+' : ''}${daySum} pt`;
     }
 
-    // 全局渲染
     function render() {
       document.getElementById('stat-total-pts').innerText = store.totalPoints;
       document.getElementById('points-tab-total').innerText = store.totalPoints;
@@ -814,7 +1008,46 @@
       renderCalendar();
       renderSelectedDateDetails();
 
-      // 积分变动列表（全量明细Tab）
+      // 运动列表渲染
+      const sportBox = document.getElementById('sport-history-list');
+      if (store.sports && store.sports.length > 0) {
+        sportBox.innerHTML = store.sports.map(s => `
+          <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-2 font-bold">
+            <div class="flex justify-between items-center text-gray-500 text-[10px]">
+              <span>📅 ${s.date} | ⏱️ ${s.duration}分钟</span>
+              <button onclick="deleteSport(${s.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
+            </div>
+            <p class="text-slate-800 text-sm font-extrabold">⚽️ ${s.name}</p>
+            ${s.photo ? `<img src="${s.photo}" class="w-full h-40 object-cover rounded-lg border-2 border-[#2A2E35]">` : ''}
+            ${s.comment ? `<p class="text-gray-600 text-xs bg-[#FFF2B8] p-2 rounded-lg border border-[#2A2E35]">💬 ${s.comment}</p>` : ''}
+          </div>
+        `).join('');
+      } else {
+        sportBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">还没有运动打卡，动起来吧！</p>';
+      }
+
+      // Movie 列表渲染
+      const movieBox = document.getElementById('movie-history-list');
+      if (store.movies && store.movies.length > 0) {
+        movieBox.innerHTML = store.movies.map(m => `
+          <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-2 font-bold">
+            <div class="flex justify-between items-center text-gray-500 text-[10px]">
+              <span>📅 ${m.date} | ⏱️ ${m.duration}分钟</span>
+              <button onclick="deleteMovie(${m.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <p class="text-slate-800 text-sm font-extrabold">🎬 ${m.name}</p>
+              <span class="text-xs">${m.rating}</span>
+            </div>
+            ${m.photo ? `<img src="${m.photo}" class="w-full h-44 object-cover rounded-lg border-2 border-[#2A2E35]">` : ''}
+            ${m.review ? `<p class="text-gray-600 text-xs bg-[#FFF2B8] p-2 rounded-lg border border-[#2A2E35]">📝 ${m.review}</p>` : ''}
+          </div>
+        `).join('');
+      } else {
+        movieBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">还没有 Movie 记录，去看看好看的电影吧！</p>';
+      }
+
+      // 积分变动列表
       const pointLogBox = document.getElementById('point-log-list');
       if (store.pointLogs && store.pointLogs.length > 0) {
         pointLogBox.innerHTML = store.pointLogs.map(log => `
@@ -835,7 +1068,7 @@
         pointLogBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">暂无积分变动记录</p>';
       }
 
-      // 日记历史渲染
+      // 日记列表
       const diaryBox = document.getElementById('diary-history');
       if (store.diaries && store.diaries.length > 0) {
         diaryBox.innerHTML = store.diaries.map(d => `
@@ -874,7 +1107,7 @@
 
       // 时间轴
       const timelineBox = document.getElementById('timeline-list');
-      timelineBox.innerHTML = store.todos.map(t => `
+      timelineBox.innerHTML = store.todos.length > 0 ? store.todos.map(t => `
         <div class="flex items-center gap-2 p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl">
           <span class="bg-[#FFF2B8] px-2 py-0.5 rounded-md border border-[#2A2E35] font-black text-[10px]">${t.time}</span>
           <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#3157A4]">
@@ -882,10 +1115,10 @@
           <span class="text-xs font-black text-amber-500">+${t.pts}</span>
           <button onclick="deleteTodo(${t.id})" class="text-gray-300 hover:text-red-500 font-bold ml-1">×</button>
         </div>
-      `).join('');
+      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">暂无待办事项</p>';
 
       // 学习记录
-      document.getElementById('study-history').innerHTML = store.studies.map(s => `
+      document.getElementById('study-history').innerHTML = store.studies.length > 0 ? store.studies.map(s => `
         <div class="flex justify-between items-center p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl font-bold">
           <span>${s.icon} ${s.subject} (${s.time}分钟)</span>
           <div class="flex items-center gap-2">
@@ -893,10 +1126,10 @@
             <button onclick="deleteStudy(${s.id})" class="text-gray-300 hover:text-red-500">×</button>
           </div>
         </div>
-      `).join('');
+      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">今天还没有专注记录</p>';
 
-      // 习惯列表
-      document.getElementById('habit-list').innerHTML = store.habits.map(h => `
+      // 打卡列表
+      document.getElementById('habit-list').innerHTML = store.habits.length > 0 ? store.habits.map(h => `
         <div class="flex justify-between items-center p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl font-bold">
           <div class="flex items-center gap-2">
             <span>${h.icon}</span>
@@ -909,10 +1142,10 @@
             <button onclick="deleteHabit(${h.id})" class="text-gray-300 hover:text-red-500">×</button>
           </div>
         </div>
-      `).join('');
+      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">暂无打卡习惯，点击上方添加！</p>';
 
       // 阅读列表
-      document.getElementById('book-list').innerHTML = store.books.map(b => {
+      document.getElementById('book-list').innerHTML = store.books.length > 0 ? store.books.map(b => {
         const percent = Math.min(100, Math.round((b.read / b.total) * 100)) || 0;
         return `
           <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-1.5 font-bold">
@@ -929,10 +1162,10 @@
             <p class="text-[10px] text-gray-500">已读 ${b.read} / ${b.total} 页</p>
           </div>
         `;
-      }).join('');
+      }).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">书架空空如也</p>';
 
       // 奖励列表
-      document.getElementById('reward-cards').innerHTML = store.rewards.map(r => `
+      document.getElementById('reward-cards').innerHTML = store.rewards.length > 0 ? store.rewards.map(r => `
         <div class="cartoon-card p-3 flex flex-col justify-between text-center space-y-2 relative">
           <button onclick="deleteReward(${r.id})" class="absolute top-1 right-2 text-gray-300 hover:text-red-500 font-bold text-sm">×</button>
           <div>
@@ -942,7 +1175,7 @@
           </div>
           <button onclick="redeemReward(${r.cost}, '${r.name}')" class="cartoon-btn py-1 text-xs">兑换</button>
         </div>
-      `).join('');
+      `).join('') : '<p class="text-xs text-gray-400 italic col-span-2 text-center py-2">暂无可用奖品</p>';
     }
 
     render();
