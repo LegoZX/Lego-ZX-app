@@ -34,7 +34,7 @@
       <h1 class="text-xl font-black flex items-center gap-2">
         <span>🎯</span> 个人自律与资产管理控制台
       </h1>
-      <p class="text-xs font-bold text-gray-500 mt-1">系统已连续运行 | 保持自律，积少成多</p>
+      <p class="text-xs font-bold text-gray-500 mt-1">按日历独立记录与查阅 | 保持自律，积少成多</p>
     </div>
     <div class="flex gap-3 mt-2 sm:mt-0">
       <div class="bg-[#E2F0D9] border-2 border-[#2A2E35] px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1">
@@ -53,15 +53,15 @@
     </div>
   </header>
 
-  <!-- 日历面板 -->
+  <!-- 日历面板（按日查阅核心） -->
   <section class="neo-box p-4 rounded-2xl">
     <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
       <h2 class="font-black text-sm flex items-center gap-1">
-        <span>📅</span> 历史日历查阅 (当前选中: <span id="selected-date-display" class="text-blue-600 underline">--</span>)
+        <span>📅</span> 日历查阅视角 (当前查看: <span id="selected-date-display" class="text-blue-600 underline">--</span>)
       </h2>
       <div class="flex items-center gap-2">
         <button onclick="goToToday()" class="neo-btn bg-[#FFF2B8] px-2 py-0.5 rounded font-black text-xs">
-          📍 回到今天
+          📍 切回今天
         </button>
         <button onclick="changeMonth(-1)" class="neo-btn bg-white px-2 py-0.5 rounded font-bold text-xs">← 上月</button>
         <span id="calendar-month-title" class="font-black text-xs">----年--月</span>
@@ -183,18 +183,17 @@
       return `${y}-${m}-${day}`;
     }
 
-    // 日期全局变量定义
+    // 全局日期变量
     let todayStr = formatDate(new Date());
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth() + 1;
     let selectedCalendarDate = todayStr;
 
-    // 检查并自动校准日期
+    // 跨日检测：过了零点自动更正“今日”标记，并默认切到新的一天
     function checkDateUpdate() {
       const realToday = formatDate(new Date());
       if (realToday !== todayStr) {
         todayStr = realToday;
-        // 自动把选中的日期切到最新的一天
         selectedCalendarDate = todayStr;
         currentYear = new Date().getFullYear();
         currentMonth = new Date().getMonth() + 1;
@@ -203,7 +202,7 @@
       }
     }
 
-    // 快捷跳回今天
+    // 快捷按钮：随时切回今天
     function goToToday() {
       const d = new Date();
       todayStr = formatDate(d);
@@ -214,7 +213,7 @@
       render();
     }
 
-    // 本地存储
+    // 读取与保存 LocalStorage 数据
     let store = JSON.parse(localStorage.getItem('my_life_app_data')) || {
       pts: 0,
       repairCards: 0,
@@ -301,9 +300,10 @@
       const habit = store.habits.find(h => h.id === habitId);
       const index = list.indexOf(habitId);
 
-      if (dateStr !== todayStr && index === -1) {
+      // 过去的日期补签校验
+      if (dateStr < todayStr && index === -1) {
         if (store.repairCards <= 0) {
-          alert("补签过去日期的习惯需要消耗 1 张补签卡！");
+          alert("补签过去日期的习惯需要消耗 1 张补签卡！当前补签卡不足。");
           return;
         }
         if (confirm("是否消耗 1 张补签卡补签此习惯？")) {
@@ -409,6 +409,7 @@
       const totalAsset = store.finance.reduce((acc, cur) => cur.type === 'inc' ? acc + cur.amount : acc - cur.amount, 0);
       document.getElementById('stat-asset').innerText = `￥${totalAsset.toFixed(2)}`;
 
+      // 习惯渲染
       const habitBox = document.getElementById('habit-list');
       const dayCheckins = store.checkins[selectedCalendarDate] || [];
       
@@ -430,6 +431,7 @@
         `;
       }).join('') || '<p class="text-xs text-gray-400 italic">暂无习惯，点击右上角添加。</p>';
 
+      // 四象限渲染（严格按 selectedCalendarDate 过滤）
       for (let i = 1; i <= 4; i++) {
         const quadBox = document.getElementById(`quad-${i}`);
         const items = store.todos.filter(t => t.quad === i && t.date === selectedCalendarDate);
@@ -451,6 +453,7 @@
         `).join('') || '<p class="text-[10px] text-gray-400 italic">无事项</p>';
       }
 
+      // 时间轴渲染
       const timelineBox = document.getElementById('timeline-list');
       const dayTodos = store.todos.filter(t => t.date === selectedCalendarDate);
       timelineBox.innerHTML = dayTodos.length > 0 ? dayTodos.map(t => `
@@ -463,6 +466,7 @@
         </div>
       `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">所选日期无待办事项</p>';
 
+      // 收支记录渲染
       const finBox = document.getElementById('finance-list');
       finBox.innerHTML = store.finance.map(f => `
         <div class="flex justify-between items-center p-2.5 rounded-xl border-2 border-[#2A2E35] bg-white text-xs font-bold">
@@ -480,17 +484,17 @@
       `).join('') || '<p class="text-xs text-gray-400 italic">暂无收支记录。</p>';
     }
 
-    // 页面唤醒/切回时自动检查
+    // 页面重新显示时检查跨日
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         checkDateUpdate();
       }
     });
 
-    // 每 1 分钟后台定时检测一次是否过零点
+    // 每 1 分钟检测一次是否跨零点
     setInterval(checkDateUpdate, 60000);
 
-    // 首次加载渲染
+    // 初始化渲染
     checkDateUpdate();
     renderCalendar();
     render();
