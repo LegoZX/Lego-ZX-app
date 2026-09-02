@@ -175,163 +175,424 @@
     </div>
   </main>
 
-  <script>
-    function formatDate(d) {
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
-    }
-
-    // 全局日期变量
-    let todayStr = formatDate(new Date());
-    let currentYear = new Date().getFullYear();
-    let currentMonth = new Date().getMonth() + 1;
+    <script>
+    let currentTodoView = 'matrix';
+    const todayStr = new Date().toISOString().split('T')[0];
     let selectedCalendarDate = todayStr;
 
-    // 跨日检测：过了零点自动更正“今日”标记，并默认切到新的一天
-    function checkDateUpdate() {
-      const realToday = formatDate(new Date());
-      if (realToday !== todayStr) {
-        todayStr = realToday;
-        selectedCalendarDate = todayStr;
-        currentYear = new Date().getFullYear();
-        currentMonth = new Date().getMonth() + 1;
-        renderCalendar();
-        render();
-      }
-    }
-
-    // 快捷按钮：随时切回今天
-    function goToToday() {
-      const d = new Date();
-      todayStr = formatDate(d);
-      selectedCalendarDate = todayStr;
-      currentYear = d.getFullYear();
-      currentMonth = d.getMonth() + 1;
-      renderCalendar();
-      render();
-    }
-
-    // 读取与保存 LocalStorage 数据
-    let store = JSON.parse(localStorage.getItem('my_life_app_data')) || {
-      pts: 0,
-      repairCards: 0,
-      habits: [],
-      checkins: {},
+    const initialCleanStore = {
+      lastDate: todayStr, // 记录最后一次打开页面的日期
+      totalPoints: 0,
+      todayPoints: 0,
+      pointLogs: [],
       todos: [],
-      finance: []
+      diaries: [],
+      studies: [],
+      habits: [],
+      books: [],
+      sports: [],
+      movies: [],
+      finances: [],
+      finCategories: ["🍜 餐饮", "🛍 购物", "🎮 娱乐", "🚌 交通", "📖 学习"],
+      rewards: []
     };
 
+    let store = JSON.parse(localStorage.getItem('lego_zx_data_v8')) || initialCleanStore;
+
+    // ==================== 隔夜自动清理逻辑 ====================
+    function checkAndCleanOvernightData() {
+      // 兼容旧数据中没有 lastDate 的情况
+      if (!store.lastDate) {
+        store.lastDate = todayStr;
+      }
+
+      // 如果当前日期不等于上一次保存的日期（说明发生了跨天）
+      if (store.lastDate !== todayStr) {
+        // 1. 自动清理隔夜未完成的待办事项 (done: false)，仅保留已完成的 (done: true) 归档在历史记录中
+        if (store.todos && store.todos.length > 0) {
+          store.todos = store.todos.filter(todo => todo.done === true);
+        }
+
+        // 2. 重置每日积分统计（累计总积分 totalPoints 保持不变）
+        store.todayPoints = 0;
+
+        // 3. 更新系统最后记录日期为今天
+        store.lastDate = todayStr;
+
+        // 保存清理后的数据
+        localStorage.setItem('lego_zx_data_v8', JSON.stringify(store));
+      }
+    }
+
+    // 页面加载时优先运行隔夜清理检测
+    checkAndCleanOvernightData();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (document.getElementById('movie-date')) document.getElementById('movie-date').value = todayStr;
+      if (document.getElementById('sport-date')) document.getElementById('sport-date').value = todayStr;
+      if (document.getElementById('fin-date')) document.getElementById('fin-date').value = todayStr;
+    });
+
     function saveData() {
-      localStorage.setItem('my_life_app_data', JSON.stringify(store));
+      store.lastDate = todayStr; // 每次保存时更新日期
+      localStorage.setItem('lego_zx_data_v8', JSON.stringify(store));
       render();
     }
 
-    function switchTab(tab) {
-      ['habit', 'todo', 'finance'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.add('hidden');
-        document.getElementById(`tab-btn-${t}`).className = 'neo-btn px-4 py-2 rounded-xl font-black text-xs bg-white';
-      });
-      document.getElementById(`tab-${tab}`).classList.remove('hidden');
-      document.getElementById(`tab-btn-${tab}`).className = 'neo-btn px-4 py-2 rounded-xl font-black text-xs bg-[#FFE5EC]';
-    }
-
-    function changeMonth(delta) {
-      currentMonth += delta;
-      if (currentMonth > 12) { currentMonth = 1; currentYear++; }
-      if (currentMonth < 1) { currentMonth = 12; currentYear--; }
-      renderCalendar();
-    }
-
-    function selectDate(dateStr) {
-      selectedCalendarDate = dateStr;
-      renderCalendar();
-      render();
-    }
-
-    function renderCalendar() {
-      document.getElementById('calendar-month-title').innerText = `${currentYear}年${String(currentMonth).padStart(2, '0')}月`;
-      document.getElementById('selected-date-display').innerText = selectedCalendarDate;
-
-      const grid = document.getElementById('calendar-grid');
-      grid.innerHTML = ['日','一','二','三','四','五','六'].map(d => `<div class="text-gray-400 py-1">${d}</div>`).join('');
-
-      const firstDay = new Date(currentYear, currentMonth - 1, 1).getDay();
-      const totalDays = new Date(currentYear, currentMonth, 0).getDate();
-
-      for (let i = 0; i < firstDay; i++) {
-        grid.innerHTML += `<div></div>`;
-      }
-
-      for (let day = 1; day <= totalDays; day++) {
-        const dStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const isSelected = dStr === selectedCalendarDate;
-        const isToday = dStr === todayStr;
-
-        const hasCheckin = store.checkins[dStr] && store.checkins[dStr].length > 0;
-        const hasTodo = store.todos.some(t => t.date === dStr && !t.done);
-
-        grid.innerHTML += `
-          <button onclick="selectDate('${dStr}')" class="p-1.5 rounded-lg border flex flex-col items-center justify-between text-xs h-12 ${
-            isSelected ? 'border-2 border-blue-600 bg-blue-50 font-black' : 'border-gray-200 bg-white'
-          }">
-            <span class="${isToday ? 'bg-red-500 text-white rounded-full px-1.5 py-0.2' : ''}">${day}</span>
-            <div class="flex gap-0.5 text-[8px]">
-              ${hasCheckin ? '🟢' : ''}
-              ${hasTodo ? '🔴' : ''}
-            </div>
-          </button>
-        `;
-      }
-    }
-
-    function addHabit() {
-      const name = prompt("输入习惯名称:", "");
-      if (!name) return;
-      const pts = parseInt(prompt("完成单次奖励积分:", "10")) || 10;
-      store.habits.push({ id: Date.now(), name, pts });
-      saveData();
-    }
-
-    function toggleCheckin(habitId, dateStr) {
-      if (!store.checkins[dateStr]) store.checkins[dateStr] = [];
-      const list = store.checkins[dateStr];
-      const habit = store.habits.find(h => h.id === habitId);
-      const index = list.indexOf(habitId);
-
-      // 过去的日期补签校验
-      if (dateStr < todayStr && index === -1) {
-        if (store.repairCards <= 0) {
-          alert("补签过去日期的习惯需要消耗 1 张补签卡！当前补签卡不足。");
-          return;
-        }
-        if (confirm("是否消耗 1 张补签卡补签此习惯？")) {
-          store.repairCards--;
-          list.push(habitId);
-          if (habit) store.pts += habit.pts;
-        }
+    function resetAllData() {
+      if (confirm("⚠️ 确定要清空所有的积分、待办打卡、记账、运动和 Movie 记录吗？此操作不可撤销！")) {
+        store = JSON.parse(JSON.stringify(initialCleanStore));
         saveData();
-        return;
+        alert("🧹 所有数据已成功清零！开启全新的自律旅程！");
       }
+    }
 
-      if (index > -1) {
-        list.splice(index, 1);
-        if (habit) store.pts = Math.max(0, store.pts - habit.pts);
-      } else {
-        list.push(habitId);
-        if (habit) store.pts += habit.pts;
+    function addPointLog(source, amount) {
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      store.pointLogs.unshift({
+        id: Date.now(),
+        source,
+        amount,
+        date: todayStr,
+        time
+      });
+      store.totalPoints += amount;
+      if (amount > 0) store.todayPoints += amount;
+    }
+
+    function deletePointLog(id) {
+      const target = store.pointLogs.find(l => l.id === id);
+      if (target) {
+        store.totalPoints -= target.amount;
+        if (target.date === todayStr && target.amount > 0) store.todayPoints -= target.amount;
+        store.pointLogs = store.pointLogs.filter(l => l.id !== id);
+        saveData();
       }
+    }
+
+    function manualAdjustPoints() {
+      const reason = prompt("请输入调整原因:", "手动调整");
+      if (!reason) return;
+      const amount = parseInt(prompt("请输入变动数值 (扣分为负数，例: -20 或 50):", "-10"));
+      if (isNaN(amount) || amount === 0) return;
+
+      addPointLog(`[手动调整] ${reason}`, amount);
       saveData();
     }
 
-    function buyRepairCard() {
-      if (store.pts < 50) {
-        alert("积分不足！需要 50 积分兑换 1 张补签卡。");
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock-display').innerText = `${hours}:${minutes}`;
+      document.getElementById('header-time').innerText = now.toLocaleDateString('zh-CN');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function switchTab(tabKey) {
+      document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`page-${tabKey}`).classList.remove('hidden');
+
+      document.querySelectorAll('nav button').forEach(el => {
+        el.classList.remove('active-nav-item');
+        el.classList.add('text-[#3157A4]');
+      });
+      const activeBtn = document.getElementById(`nav-${tabKey}`);
+      if(activeBtn) {
+        activeBtn.classList.add('active-nav-item');
+        activeBtn.classList.remove('text-[#3157A4]');
+      }
+
+      if (tabKey === 'finance') {
+        renderFinancePieChart();
+      }
+    }
+
+    function switchTodoView(viewType) {
+      currentTodoView = viewType;
+      const matrixBtn = document.getElementById('view-matrix-btn');
+      const timelineBtn = document.getElementById('view-timeline-btn');
+      const matrixBox = document.getElementById('todo-matrix-view');
+      const timelineBox = document.getElementById('todo-timeline-view');
+
+      if (viewType === 'matrix') {
+        matrixBtn.className = "flex-1 py-1 rounded-lg bg-[#3157A4] text-white border border-[#2A2E35]";
+        timelineBtn.className = "flex-1 py-1 rounded-lg text-gray-600";
+        matrixBox.classList.remove('hidden');
+        timelineBox.classList.add('hidden');
+      } else {
+        timelineBtn.className = "flex-1 py-1 rounded-lg bg-[#3157A4] text-white border border-[#2A2E35]";
+        matrixBtn.className = "flex-1 py-1 rounded-lg text-gray-600";
+        timelineBox.classList.remove('hidden');
+        matrixBox.classList.add('hidden');
+      }
+      render();
+    }
+
+    function getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    function addCustomCategoryPrompt() {
+      const cat = prompt("输入新分类名称 (可加 Emoji，例: ☕️ 咖啡):");
+      if (cat && cat.trim()) {
+        if (!store.finCategories.includes(cat.trim())) {
+          store.finCategories.push(cat.trim());
+          saveData();
+        }
+      }
+    }
+
+    function saveFinanceRecord() {
+      const type = document.getElementById('fin-type').value;
+      const amount = parseFloat(document.getElementById('fin-amount').value);
+      const category = document.getElementById('fin-category').value;
+      const date = document.getElementById('fin-date').value || todayStr;
+      const note = document.getElementById('fin-[#3157A4]').value.trim();
+
+      if (isNaN(amount) || amount <= 0) {
+        alert("请输入有效的金额！");
         return;
       }
-      store.pts -= 50;
-      store.repairCards++;
+
+      store.finances.unshift({
+        id: Date.now(),
+        type,
+        amount,
+        category,
+        date,
+        note
+      });
+
+      document.getElementById('fin-amount').value = "";
+      document.getElementById('fin-[#3157A4]').value = "";
+
+      addPointLog(`[记账] ${category} ${amount}元`, 2);
+      saveData();
+    }
+
+    function deleteFinanceRecord(id) {
+      store.finances = store.finances.filter(f => f.id !== id);
+      saveData();
+    }
+
+    function renderFinancePieChart() {
+      const canvas = document.getElementById('financePieChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const expenses = store.finances.filter(f => f.type === 'expense');
+      const categoryTotals = {};
+      let totalExpense = 0;
+
+      expenses.forEach(item => {
+        categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
+        totalExpense += item.amount;
+      });
+
+      const legendBox = document.getElementById('pie-legend');
+
+      if (totalExpense === 0) {
+        ctx.fillStyle = '#E5E7EB';
+        ctx.beginPath();
+        ctx.arc(90, 90, 80, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#9CA3AF';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('暂无支出', 90, 95);
+        if (legendBox) legendBox.innerHTML = '<p class="text-gray-400 text-center col-span-2">尚无支出分类数据</p>';
+        return;
+      }
+
+      const colors = ['#F87171', '#60A5FA', '#FBBF24', '#34D399', '#A78BFA', '#F472B6', '#F97316'];
+      let startAngle = 0;
+      let legendHTML = '';
+      let colorIdx = 0;
+
+      for (const [cat, amt] of Object.entries(categoryTotals)) {
+        const sliceAngle = (amt / totalExpense) * (Math.PI * 2);
+        const currentColor = colors[colorIdx % colors.length];
+
+        ctx.fillStyle = currentColor;
+        ctx.beginPath();
+        ctx.moveTo(90, 90);
+        ctx.arc(90, 90, 80, startAngle, startAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#2A2E35';
+        ctx.stroke();
+
+        const pct = Math.round((amt / totalExpense) * 100);
+        legendHTML += `
+          <div class="flex items-center gap-1.5 bg-white p-1 rounded-md border border-[#2A2E35]">
+            <span class="w-3 h-3 rounded-full border border-[#2A2E35]" style="background:${currentColor}"></span>
+            <span class="truncate flex-1">${cat}</span>
+            <span class="text-gray-500">${pct}%</span>
+          </div>
+        `;
+
+        startAngle += sliceAngle;
+        colorIdx++;
+      }
+
+      if (legendBox) legendBox.innerHTML = legendHTML;
+    }
+
+    function exportFinanceCSV(range) {
+      if (store.finances.length === 0) {
+        alert("目前没有可以导出的记账数据！");
+        return;
+      }
+
+      const now = new Date();
+      let filtered = store.finances;
+
+      if (range === 'daily') {
+        filtered = store.finances.filter(f => f.date === todayStr);
+      } else if (range === 'weekly') {
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        filtered = store.finances.filter(f => f.date >= sevenDaysAgo);
+      } else if (range === 'monthly') {
+        const currentMonth = todayStr.substring(0, 7);
+        filtered = store.finances.filter(f => f.date.startsWith(currentMonth));
+      }
+
+      if (filtered.length === 0) {
+        alert(`未找到 [${range}] 范围内的记账记录！`);
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+      csvContent += "日期,类型,分类,金额,备注\n";
+
+      filtered.forEach(item => {
+        const typeText = item.type === 'expense' ? '支出' : '收入';
+        csvContent += `${item.date},${typeText},${item.category},${item.amount},"${item.note || ''}"\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `LegoZX_账单_${range}_${todayStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    async function saveSportRecord() {
+      const date = document.getElementById('sport-date').value || todayStr;
+      const name = document.getElementById('sport-name').value.trim();
+      const duration = document.getElementById('sport-time').value || 30;
+      const comment = document.getElementById('sport-comment').value.trim();
+      const photoFile = document.getElementById('sport-photo').files[0];
+
+      if (!name) {
+        alert("请输入运动项目名称！");
+        return;
+      }
+
+      let photoData = "";
+      if (photoFile) {
+        photoData = await getBase64(photoFile);
+      }
+
+      store.sports.unshift({
+        id: Date.now(),
+        date,
+        name,
+        duration,
+        comment,
+        photo: photoData
+      });
+
+      document.getElementById('sport-name').value = "";
+      document.getElementById('sport-comment').value = "";
+      document.getElementById('sport-photo').value = "";
+
+      addPointLog(`[运动打卡] ${name}`, 15);
+      saveData();
+    }
+
+    function deleteSport(id) {
+      store.sports = store.sports.filter(s => s.id !== id);
+      saveData();
+    }
+
+    async function saveMovieRecord() {
+      const date = document.getElementById('movie-date').value || todayStr;
+      const name = document.getElementById('movie-name').value.trim();
+      const duration = document.getElementById('movie-duration').value || 120;
+      const rating = document.getElementById('movie-rating').value;
+      const review = document.getElementById('movie-review').value.trim();
+      const photoFile = document.getElementById('movie-photo').files[0];
+
+      if (!name) {
+        alert("请输入电影/剧集名称！");
+        return;
+      }
+
+      let photoData = "";
+      if (photoFile) {
+        photoData = await getBase64(photoFile);
+      }
+
+      store.movies.unshift({
+        id: Date.now(),
+        date,
+        name,
+        duration,
+        rating,
+        review,
+        photo: photoData
+      });
+
+      document.getElementById('movie-name').value = "";
+      document.getElementById('movie-review').value = "";
+      document.getElementById('movie-photo').value = "";
+
+      addPointLog(`[观影手帐] ${name}`, 10);
+      saveData();
+    }
+
+    function deleteMovie(id) {
+      store.movies = store.movies.filter(m => m.id !== id);
+      saveData();
+    }
+
+    function saveDiary() {
+      const mood = document.getElementById('diary-mood').value;
+      const weather = document.getElementById('diary-weather').value;
+      const content = document.getElementById('diary-content').value.trim();
+
+      if (!content) {
+        alert("请先填写日记内容哦！");
+        return;
+      }
+
+      store.diaries.unshift({
+        id: Date.now(),
+        mood,
+        weather,
+        content,
+        date: todayStr
+      });
+      document.getElementById('diary-content').value = "";
+      addPointLog(`[日记] 写日记打卡`, 5);
+      saveData();
+    }
+
+    function deleteDiary(id) {
+      store.diaries = store.diaries.filter(d => d.id !== id);
       saveData();
     }
 
@@ -339,10 +600,8 @@
       const icon = prompt("图标 (Emoji):", "📌") || "📌";
       const title = prompt("任务描述:", "");
       if (!title || !title.trim()) return;
-      
-      const todoDate = prompt("任务日期 (YYYY-MM-DD):", selectedCalendarDate) || selectedCalendarDate;
-      const time = prompt("具体时间 (例 18:00):", "20:00") || "全天";
-      const quad = parseInt(prompt("象限分组:\n1-紧急重要\n2-重要不紧急\n3-紧急不重要\n4-顺手/不紧急不重要", "1")) || 1;
+      const time = prompt("截止时间 (例 18:00):", "20:00") || "今日";
+      const quad = parseInt(prompt("象限分组:\n1-紧急重要\n2-重要不紧急\n3-紧急不重要\n4-顺手完成", "1")) || 1;
       const pts = parseInt(prompt("完成奖励积分:", "10")) || 10;
 
       store.todos.push({
@@ -353,152 +612,433 @@
         time,
         done: false,
         pts,
-        date: todoDate
+        date: todayStr
       });
-      
       saveData();
     }
 
-    function toggleTodo(todoId) {
-      const todo = store.todos.find(t => t.id === todoId);
+    function toggleTodo(id) {
+      const todo = store.todos.find(t => t.id === id);
       if (todo) {
         todo.done = !todo.done;
-        if (todo.done) store.pts += todo.pts;
-        else store.pts = Math.max(0, store.pts - todo.pts);
+        if (todo.done) {
+          addPointLog(`[待办] ${todo.title}`, todo.pts);
+        } else {
+          addPointLog(`[取消待办] ${todo.title}`, -todo.pts);
+        }
+        saveData();
       }
+    }
+
+    function deleteTodo(id) {
+      store.todos = store.todos.filter(t => t.id !== id);
       saveData();
     }
 
-    function deleteTodo(todoId) {
-      store.todos = store.todos.filter(t => t.id !== todoId);
-      saveData();
-    }
+    function recordStudy() {
+      const icon = document.getElementById('study-icon').value || '📝';
+      const subject = document.getElementById('study-subject').value || '未分类';
+      const time = parseInt(document.getElementById('study-time').value) || 30;
+      const pts = parseInt(document.getElementById('study-pts').value) || 15;
 
-    function addFinanceRecord() {
-      const type = document.getElementById('fin-type').value;
-      const amount = parseFloat(document.getElementById('fin-amount').value);
-      const note = document.getElementById('fin-note').value.trim() || '未分类';
-
-      if (isNaN(amount) || amount <= 0) {
-        alert("请输入有效的金额！");
-        return;
-      }
-
-      store.finance.unshift({
+      store.studies.unshift({
         id: Date.now(),
-        type,
-        amount,
-        note,
-        date: selectedCalendarDate
+        icon,
+        subject,
+        time,
+        pts,
+        date: todayStr
       });
-
-      document.getElementById('fin-amount').value = '';
-      document.getElementById('fin-note').value = '';
+      addPointLog(`[学习] ${subject}`, pts);
       saveData();
     }
 
-    function deleteFinance(id) {
-      store.finance = store.finance.filter(f => f.id !== id);
+    function deleteStudy(id) {
+      store.studies = store.studies.filter(s => s.id !== id);
       saveData();
+    }
+
+    function toggleHabit(id) {
+      const habit = store.habits.find(h => h.id === id);
+      if (habit) {
+        habit.done = !habit.done;
+        if (habit.done) {
+          addPointLog(`[打卡] ${habit.name}`, habit.pts);
+        } else {
+          addPointLog(`[取消打卡] ${habit.name}`, -habit.pts);
+        }
+        saveData();
+      }
+    }
+
+    function addNewHabitPrompt() {
+      const icon = prompt("图标 Emoji:", "🌱") || "🌱";
+      const name = prompt("打卡名称:", "");
+      if (name) {
+        store.habits.push({ id: Date.now(), icon, name, pts: 10, done: false });
+        saveData();
+      }
+    }
+
+    function deleteHabit(id) {
+      store.habits = store.habits.filter(h => h.id !== id);
+      saveData();
+    }
+
+    function addBookProgress() {
+      const icon = document.getElementById('book-icon').value || '📖';
+      const title = document.getElementById('book-title').value || '新书';
+      const total = parseInt(document.getElementById('book-total-pages').value) || 200;
+      const read = parseInt(document.getElementById('book-read-pages').value) || 0;
+
+      const existing = store.books.find(b => b.title === title);
+      if (existing) {
+        existing.read = read;
+        existing.total = total;
+        existing.icon = icon;
+      } else {
+        store.books.push({ id: Date.now(), icon, title, total, read });
+      }
+      addPointLog(`[阅读] ${title}`, 5);
+      saveData();
+    }
+
+    function deleteBook(id) {
+      store.books = store.books.filter(b => b.id !== id);
+      saveData();
+    }
+
+    function redeemReward(cost, name) {
+      if (store.totalPoints >= cost) {
+        addPointLog(`[兑换奖励] ${name}`, -cost);
+        alert(`🎉 成功兑换: ${name}！已经扣除 ${cost} 积分`);
+        saveData();
+      } else {
+        alert(`⚠️ 积分不足！还差 ${cost - store.totalPoints} 积分。`);
+      }
+    }
+
+    function addRewardPrompt() {
+      const icon = prompt("图标 Emoji:", "🎁") || "🎁";
+      const name = prompt("奖励名称:", "");
+      if (!name) return;
+      const cost = parseInt(prompt("需要积分:", "100")) || 100;
+      store.rewards.push({ id: Date.now(), icon, name, cost });
+      saveData();
+    }
+
+    function deleteReward(id) {
+      store.rewards = store.rewards.filter(r => r.id !== id);
+      saveData();
+    }
+
+    function exportData() {
+      const jsonStr = JSON.stringify(store);
+      navigator.clipboard.writeText(jsonStr).then(() => {
+        alert("📋 数据备份已复制到剪贴板！您可以粘贴保存到备忘录。");
+      }).catch(() => {
+        prompt("请复制下方代码进行备份：", jsonStr);
+      });
+    }
+
+    function importData() {
+      const jsonStr = prompt("请粘贴之前备份的数据 JSON 代码：");
+      if (jsonStr) {
+        try {
+          store = JSON.parse(jsonStr);
+          checkAndCleanOvernightData(); // 导入数据后立即检查一次隔夜清理
+          saveData();
+          alert("🎉 数据导入成功！");
+        } catch (e) {
+          alert("⚠️ 导入失败，代码格式不正确！");
+        }
+      }
+    }
+
+    function renderCalendar() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      document.getElementById('calendar-month-title').innerText = `${year}年 ${month + 1}月`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const gridBox = document.getElementById('calendar-grid');
+      gridBox.innerHTML = '';
+
+      for (let i = 0; i < firstDay; i++) {
+        gridBox.innerHTML += `<div></div>`;
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isSelected = dateKey === selectedCalendarDate;
+        gridBox.innerHTML += `
+          <button onclick="selectCalendarDate('${dateKey}')" class="calendar-day-btn ${isSelected ? 'calendar-day-selected' : ''}">
+            ${day}
+          </button>
+        `;
+      }
+    }
+
+    function selectCalendarDate(dateKey) {
+      selectedCalendarDate = dateKey;
+      renderCalendar();
+      renderSelectedDateDetails();
+    }
+
+    function renderSelectedDateDetails() {
+      document.getElementById('selected-date-label').innerText = selectedCalendarDate === todayStr ? '今日' : selectedCalendarDate;
+      
+      const dayTodos = store.todos.filter(t => t.date === selectedCalendarDate);
+      const todoBox = document.getElementById('calendar-todo-list');
+      if (dayTodos.length > 0) {
+        todoBox.innerHTML = dayTodos.map(t => `
+          <div class="flex justify-between items-center p-2 bg-gray-50 border border-[#2A2E35] rounded-lg">
+            <span class="${t.done ? 'line-through text-gray-400' : ''} font-bold">${t.icon} ${t.title}</span>
+            <span class="text-[10px] text-gray-400 font-bold">${t.time}</span>
+          </div>
+        `).join('');
+      } else {
+        todoBox.innerHTML = '<p class="text-gray-400 italic text-[11px]">当天没有事项</p>';
+      }
+
+      const dayLogs = store.pointLogs.filter(l => l.date === selectedCalendarDate);
+      const logBox = document.getElementById('calendar-point-list');
+      let daySum = 0;
+
+      if (dayLogs.length > 0) {
+        logBox.innerHTML = dayLogs.map(l => {
+          daySum += l.amount;
+          return `
+            <div class="flex justify-between items-center p-1.5 bg-[#FFF2B8] border border-[#2A2E35] rounded-md font-bold text-[11px]">
+              <span>${l.time || ''} ${l.source}</span>
+              <span class="${l.amount >= 0 ? 'text-emerald-600' : 'text-red-500'} font-black">${l.amount >= 0 ? '+' : ''}${l.amount}</span>
+            </div>
+          `;
+        }).join('');
+      } else {
+        logBox.innerHTML = '<p class="text-gray-400 italic text-[11px]">当天没有积分记录</p>';
+      }
+
+      document.getElementById('selected-date-pts-badge').innerText = `积分: ${daySum >= 0 ? '+' : ''}${daySum} pt`;
     }
 
     function render() {
-      document.getElementById('stat-pts').innerText = store.pts;
-      document.getElementById('stat-repair').innerText = store.repairCards;
-      
-      const totalAsset = store.finance.reduce((acc, cur) => cur.type === 'inc' ? acc + cur.amount : acc - cur.amount, 0);
-      document.getElementById('stat-asset').innerText = `￥${totalAsset.toFixed(2)}`;
+      document.getElementById('stat-total-pts').innerText = store.totalPoints;
+      document.getElementById('points-tab-total').innerText = store.totalPoints;
+      document.getElementById('stat-today-pts').innerText = `${store.todayPoints >= 0 ? '+' : ''}${store.todayPoints}`;
+      document.getElementById('points-tab-today').innerText = `${store.todayPoints >= 0 ? '+' : ''}${store.todayPoints}`;
 
-      // 习惯渲染
-      const habitBox = document.getElementById('habit-list');
-      const dayCheckins = store.checkins[selectedCalendarDate] || [];
-      
-      habitBox.innerHTML = store.habits.map(h => {
-        const checked = dayCheckins.includes(h.id);
-        return `
-          <div class="neo-box p-3 rounded-xl flex items-center justify-between bg-white">
+      // 只获取今天的待办列表渲染到待办页和总览数据
+      const todayTodos = store.todos.filter(t => t.date === todayStr);
+      const completedCount = todayTodos.filter(t => t.done).length;
+      document.getElementById('stat-tasks-total').innerText = todayTodos.length;
+      document.getElementById('stat-tasks-done').innerText = completedCount;
+
+      renderCalendar();
+      renderSelectedDateDetails();
+
+      const catSelect = document.getElementById('fin-category');
+      if (catSelect) {
+        catSelect.innerHTML = store.finCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+      }
+
+      const finBox = document.getElementById('finance-history-list');
+      if (store.finances && store.finances.length > 0) {
+        finBox.innerHTML = store.finances.map(f => `
+          <div class="flex justify-between items-center p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl font-bold">
             <div>
-              <div class="font-black text-xs">${h.name}</div>
-              <div class="text-[10px] text-amber-600 font-bold">+${h.pts}pt</div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs">${f.category}</span>
+                <span class="text-[10px] text-gray-400">📅 ${f.date}</span>
+              </div>
+              ${f.note ? `<p class="text-[10px] text-gray-500 font-normal">💬 ${f.note}</p>` : ''}
             </div>
-            <button onclick="toggleCheckin(${h.id}, '${selectedCalendarDate}')" 
-              class="neo-btn px-3 py-1.5 rounded-xl font-black text-xs ${
-                checked ? 'bg-[#E2F0D9] text-green-800' : 'bg-gray-100 text-gray-400'
-              }">
-              ${checked ? '✓ 已打卡' : '未打卡'}
-            </button>
+            <div class="flex items-center gap-2">
+              <span class="${f.type === 'expense' ? 'text-red-500' : 'text-emerald-600'} font-black text-sm">
+                ${f.type === 'expense' ? '-' : '+'}$${f.amount.toFixed(2)}
+              </span>
+              <button onclick="deleteFinanceRecord(${f.id})" class="text-gray-300 hover:text-red-500">×</button>
+            </div>
           </div>
-        `;
-      }).join('') || '<p class="text-xs text-gray-400 italic">暂无习惯，点击右上角添加。</p>';
+        `).join('');
+      } else {
+        finBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">暂无记账明细</p>';
+      }
 
-      // 四象限渲染（严格按 selectedCalendarDate 过滤）
+      renderFinancePieChart();
+
+      const sportBox = document.getElementById('sport-history-list');
+      if (store.sports && store.sports.length > 0) {
+        sportBox.innerHTML = store.sports.map(s => `
+          <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-2 font-bold">
+            <div class="flex justify-between items-center text-gray-500 text-[10px]">
+              <span>📅 ${s.date} | ⏱️ ${s.duration}分钟</span>
+              <button onclick="deleteSport(${s.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
+            </div>
+            <p class="text-slate-800 text-sm font-extrabold">⚽️ ${s.name}</p>
+            ${s.photo ? `<img src="${s.photo}" class="w-full h-40 object-cover rounded-lg border-2 border-[#2A2E35]">` : ''}
+            ${s.comment ? `<p class="text-gray-600 text-xs bg-[#FFF2B8] p-2 rounded-lg border border-[#2A2E35]">💬 ${s.comment}</p>` : ''}
+          </div>
+        `).join('');
+      } else {
+        sportBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">还没有运动打卡，动起来吧！</p>';
+      }
+
+      const movieBox = document.getElementById('movie-history-list');
+      if (store.movies && store.movies.length > 0) {
+        movieBox.innerHTML = store.movies.map(m => `
+          <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-2 font-bold">
+            <div class="flex justify-between items-center text-gray-500 text-[10px]">
+              <span>📅 ${m.date} | ⏱️ ${m.duration}分钟</span>
+              <button onclick="deleteMovie(${m.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
+            </div>
+            <div class="flex justify-between items-center">
+              <p class="text-slate-800 text-sm font-extrabold">🎬 ${m.name}</p>
+              <span class="text-xs">${m.rating}</span>
+            </div>
+            ${m.photo ? `<img src="${m.photo}" class="w-full h-44 object-cover rounded-lg border-2 border-[#2A2E35]">` : ''}
+            ${m.review ? `<p class="text-gray-600 text-xs bg-[#FFF2B8] p-2 rounded-lg border border-[#2A2E35]">📝 ${m.review}</p>` : ''}
+          </div>
+        `).join('');
+      } else {
+        movieBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">还没有 Movie 记录，去看看好看的电影吧！</p>';
+      }
+
+      const pointLogBox = document.getElementById('point-log-list');
+      if (store.pointLogs && store.pointLogs.length > 0) {
+        pointLogBox.innerHTML = store.pointLogs.map(log => `
+          <div class="flex justify-between items-center p-2 bg-[#FFF2B8] rounded-lg border-2 border-[#2A2E35] font-bold">
+            <div class="flex items-center gap-1.5 overflow-hidden">
+              <span class="text-gray-400 text-[10px]">${log.date || ''} ${log.time || ''}</span>
+              <span class="truncate text-slate-800">${log.source}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="${log.amount >= 0 ? 'text-emerald-600' : 'text-red-500'} font-black">
+                ${log.amount >= 0 ? '+' : ''}${log.amount} pt
+              </span>
+              <button onclick="deletePointLog(${log.id})" class="text-gray-400 hover:text-red-500 text-sm font-black">×</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        pointLogBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">暂无积分变动记录</p>';
+      }
+
+      const diaryBox = document.getElementById('diary-history');
+      if (store.diaries && store.diaries.length > 0) {
+        diaryBox.innerHTML = store.diaries.map(d => `
+          <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-1 font-bold">
+            <div class="flex justify-between items-center text-gray-500 text-[10px]">
+              <span>📅 ${d.date} | ${d.mood} | ${d.weather}</span>
+              <button onclick="deleteDiary(${d.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
+            </div>
+            <p class="text-slate-800 text-xs leading-relaxed">${d.content}</p>
+          </div>
+        `).join('');
+      } else {
+        diaryBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">还没有日记，快去写下第一篇吧！</p>';
+      }
+
+      // 象限待办只包含今日的
       for (let i = 1; i <= 4; i++) {
         const quadBox = document.getElementById(`quad-${i}`);
-        const items = store.todos.filter(t => t.quad === i && t.date === selectedCalendarDate);
-        
+        const items = todayTodos.filter(t => t.quad === i);
         quadBox.innerHTML = items.map(t => `
           <div class="bg-white p-2 rounded-lg border-2 border-[#2A2E35] space-y-1">
             <div class="flex items-center justify-between">
-              <span class="font-bold text-xs flex items-center gap-1">
+              <span class="font-bold flex items-center gap-1">
                 <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#3157A4]">
                 <span class="${t.done ? 'line-through text-gray-400' : ''}">${t.icon} ${t.title}</span>
               </span>
-              <button onclick="deleteTodo(${t.id})" class="text-gray-400 hover:text-red-500 font-bold text-xs">×</button>
+              <button onclick="deleteTodo(${t.id})" class="text-gray-400 hover:text-red-500 font-bold">×</button>
             </div>
             <div class="flex justify-between text-[10px] text-gray-400 font-bold">
               <span>⏰ ${t.time}</span>
               <span class="text-amber-500">+${t.pts}pt</span>
             </div>
           </div>
-        `).join('') || '<p class="text-[10px] text-gray-400 italic">无事项</p>';
+        `).join('') || '<p class="text-[10px] text-gray-400 italic">暂无事项</p>';
       }
 
-      // 时间轴渲染
+      // 时间轴待办只包含今日的
       const timelineBox = document.getElementById('timeline-list');
-      const dayTodos = store.todos.filter(t => t.date === selectedCalendarDate);
-      timelineBox.innerHTML = dayTodos.length > 0 ? dayTodos.map(t => `
-        <div class="flex items-center gap-2 p-2 bg-white border-2 border-[#2A2E35] rounded-xl text-xs">
-          <span class="bg-[#FFF2B8] px-2 py-0.5 rounded border border-[#2A2E35] font-black">${t.time}</span>
+      timelineBox.innerHTML = todayTodos.length > 0 ? todayTodos.map(t => `
+        <div class="flex items-center gap-2 p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl">
+          <span class="bg-[#FFF2B8] px-2 py-0.5 rounded-md border border-[#2A2E35] font-black text-[10px]">${t.time}</span>
           <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#3157A4]">
           <span class="flex-1 font-bold ${t.done ? 'line-through text-gray-400' : ''}">${t.icon} ${t.title}</span>
-          <span class="font-black text-amber-500">+${t.pts}</span>
-          <button onclick="deleteTodo(${t.id})" class="text-gray-300 hover:text-red-500 font-bold">×</button>
+          <span class="text-xs font-black text-amber-500">+${t.pts}</span>
+          <button onclick="deleteTodo(${t.id})" class="text-gray-300 hover:text-red-500 font-bold ml-1">×</button>
         </div>
-      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">所选日期无待办事项</p>';
+      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">暂无待办事项</p>';
 
-      // 收支记录渲染
-      const finBox = document.getElementById('finance-list');
-      finBox.innerHTML = store.finance.map(f => `
-        <div class="flex justify-between items-center p-2.5 rounded-xl border-2 border-[#2A2E35] bg-white text-xs font-bold">
-          <div>
-            <span class="${f.type === 'inc' ? 'text-green-600' : 'text-red-500'} font-black text-sm">
-              ${f.type === 'inc' ? '+' : '-'}${f.amount.toFixed(2)}
-            </span>
-            <span class="ml-2 text-gray-600">${f.note}</span>
-          </div>
-          <div class="flex items-center gap-2 text-gray-400 text-[10px]">
-            <span>${f.date}</span>
-            <button onclick="deleteFinance(${f.id})" class="text-gray-300 hover:text-red-500 font-bold text-xs">×</button>
+      document.getElementById('study-history').innerHTML = store.studies.length > 0 ? store.studies.map(s => `
+        <div class="flex justify-between items-center p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl font-bold">
+          <span>${s.icon} ${s.subject} (${s.time}分钟)</span>
+          <div class="flex items-center gap-2">
+            <span class="text-[#3157A4]">+${s.pts} 分</span>
+            <button onclick="deleteStudy(${s.id})" class="text-gray-300 hover:text-red-500">×</button>
           </div>
         </div>
-      `).join('') || '<p class="text-xs text-gray-400 italic">暂无收支记录。</p>';
+      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">今天还没有专注记录</p>';
+
+      document.getElementById('habit-list').innerHTML = store.habits.length > 0 ? store.habits.map(h => `
+        <div class="flex justify-between items-center p-2.5 bg-white border-2 border-[#2A2E35] rounded-xl font-bold">
+          <div class="flex items-center gap-2">
+            <span>${h.icon}</span>
+            <span class="${h.done ? 'line-through text-gray-400' : ''}">${h.name}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="toggleHabit(${h.id})" class="cartoon-btn px-3 py-1 text-xs ${h.done ? 'bg-emerald-300' : ''}">
+              ${h.done ? '已打卡 √' : '+10分 打卡'}
+            </button>
+            <button onclick="deleteHabit(${h.id})" class="text-gray-300 hover:text-red-500">×</button>
+          </div>
+        </div>
+      `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">暂无打卡习惯，点击上方添加！</p>';
+
+      document.getElementById('book-list').innerHTML = store.books.length > 0 ? store.books.map(b => {
+        const percent = Math.min(100, Math.round((b.read / b.total) * 100)) || 0;
+        return `
+          <div class="p-3 bg-white border-2 border-[#2A2E35] rounded-xl space-y-1.5 font-bold">
+            <div class="flex justify-between items-center">
+              <span>${b.icon} ${b.title}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[#3157A4]">${percent}%</span>
+                <button onclick="deleteBook(${b.id})" class="text-gray-300 hover:text-red-500">×</button>
+              </div>
+            </div>
+            <div class="w-full bg-[#FFF2B8] h-3 rounded-full border-2 border-[#2A2E35] overflow-hidden">
+              <div class="bg-[#F2C94C] h-full" style="width: ${percent}%"></div>
+            </div>
+            <p class="text-[10px] text-gray-500">已读 ${b.read} / ${b.total} 页</p>
+          </div>
+        `;
+      }).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">书架空空如也</p>';
+
+      document.getElementById('reward-cards').innerHTML = store.rewards.length > 0 ? store.rewards.map(r => `
+        <div class="cartoon-card p-3 flex flex-col justify-between text-center space-y-2 relative">
+          <button onclick="deleteReward(${r.id})" class="absolute top-1 right-2 text-gray-300 hover:text-red-500 font-bold text-sm">×</button>
+          <div>
+            <div class="text-3xl my-1">${r.icon}</div>
+            <p class="font-extrabold text-gray-800">${r.name}</p>
+            <p class="text-xs font-black text-amber-500 mt-0.5">⭐️ ${r.cost} pts</p>
+          </div>
+          <button onclick="redeemReward(${r.cost}, '${r.name}')" class="cartoon-btn py-1 text-xs">兑换</button>
+        </div>
+      `).join('') : '<p class="text-xs text-gray-400 italic col-span-2 text-center py-2">暂无可用奖品</p>';
     }
 
-    // 页面重新显示时检查跨日
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        checkDateUpdate();
-      }
-    });
-
-    // 每 1 分钟检测一次是否跨零点
-    setInterval(checkDateUpdate, 60000);
-
-    // 初始化渲染
-    checkDateUpdate();
-    renderCalendar();
     render();
   </script>
+
+    
+      
+        
+        
 </body>
 </html>
 
