@@ -7,11 +7,12 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* “芝士奶酪”配色系统：
-       #F2ECD2 (奶油底) | #FFE57C (亮黄点缀/卡片) | #B1E0F0 (浅天蓝) | #2B7AB3 (深海蓝主色)
+    /* 配色系统调整：
+       主调（蓝色系）：#2B7AB3 (深海蓝) | #B1E0F0 (浅天蓝) | #F4F8FA (极浅蓝底色)
+       点缀（黄色系）：#FFE57C (明黄点缀) | #F2ECD2 (奶油暖黄)
     */
     body {
-      background-color: #F2ECD2;
+      background-color: #F4F8FA;
       color: #1A3B5C;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
@@ -23,23 +24,31 @@
       transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
     .cartoon-btn {
-      background-color: #FFE57C;
-      color: #1A3B5C;
-      border: 2px solid #2B7AB3;
-      box-shadow: 2px 2px 0px #2B7AB3;
+      background-color: #2B7AB3;
+      color: #FFFFFF;
+      border: 2px solid #1A3B5C;
+      box-shadow: 2px 2px 0px #1A3B5C;
       border-radius: 0.5rem;
       font-weight: bold;
       transition: all 0.1s ease;
     }
     .cartoon-btn:active {
       transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px #2B7AB3;
+      box-shadow: 0px 0px 0px #1A3B5C;
+    }
+    .cartoon-btn-accent {
+      background-color: #FFE57C;
+      color: #1A3B5C;
+      border: 2px solid #2B7AB3;
+      box-shadow: 2px 2px 0px #2B7AB3;
+      border-radius: 0.5rem;
+      font-weight: bold;
     }
     .active-nav-item {
-      background-color: #FFE57C !important;
-      color: #1A3B5C !important;
-      border-color: #2B7AB3 !important;
-      box-shadow: 2px 2px 0px #2B7AB3 !important;
+      background-color: #2B7AB3 !important;
+      color: #FFFFFF !important;
+      border-color: #1A3B5C !important;
+      box-shadow: 2px 2px 0px #1A3B5C !important;
     }
     .calendar-day-btn {
       aspect-ratio: 1;
@@ -60,51 +69,51 @@
     }
   </style>
 </head>
-<body class="p-2 sm:p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between">
+<body class="p-2 sm:p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between pb-20">
 
-  <!-- 顶部 Header 板块 -->
-  <header class="cartoon-card p-4 mb-4 bg-[#FFE57C] text-[#1A3B5C] border-[#2B7AB3]">
+  <!-- 顶部 Header 板块 (主色：蓝色系) -->
+  <header class="cartoon-card p-4 mb-4 bg-[#2B7AB3] text-white border-[#1A3B5C]">
     <div class="flex justify-between items-center mb-2">
       <div>
         <h1 class="text-xl font-black tracking-wide">🧩 LegoZX Dashboard</h1>
-        <p id="header-time" class="text-xs text-[#2B7AB3] font-bold mt-0.5">加载中...</p>
+        <p id="header-time" class="text-xs text-[#B1E0F0] font-bold mt-0.5">加载中...</p>
       </div>
       <div class="text-right">
-        <span id="clock-display" class="text-2xl font-black tracking-wider bg-[#B1E0F0]/50 px-2 py-1 rounded-lg text-[#2B7AB3]">00:00</span>
+        <span id="clock-display" class="text-2xl font-black tracking-wider bg-[#1A3B5C]/40 px-2 py-1 rounded-lg text-[#FFE57C]">00:00</span>
       </div>
     </div>
     
     <!-- 统计卡片条 -->
-    <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-[#2B7AB3]/20 text-center">
-      <div class="bg-white/60 p-1.5 rounded-lg border border-[#2B7AB3]/20">
-        <p class="text-[10px] text-[#2B7AB3] font-bold">可用总积分</p>
-        <p id="stat-total-pts" class="text-base font-black text-[#1A3B5C]">0</p>
+    <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-white/20 text-center">
+      <div class="bg-white/10 p-1.5 rounded-lg border border-white/20">
+        <p class="text-[10px] text-[#B1E0F0] font-bold">可用总积分</p>
+        <p id="stat-total-pts" class="text-base font-black text-[#FFE57C]">0</p>
       </div>
-      <div class="bg-white/60 p-1.5 rounded-lg border border-[#2B7AB3]/20">
-        <p class="text-[10px] text-[#2B7AB3] font-bold">今日收益</p>
-        <p id="stat-today-pts" class="text-base font-black text-emerald-700">+0</p>
+      <div class="bg-white/10 p-1.5 rounded-lg border border-white/20">
+        <p class="text-[10px] text-[#B1E0F0] font-bold">今日收益</p>
+        <p id="stat-today-pts" class="text-base font-black text-emerald-300">+0</p>
       </div>
-      <div class="bg-white/60 p-1.5 rounded-lg border border-[#2B7AB3]/20">
-        <p class="text-[10px] text-[#2B7AB3] font-bold">今日待办</p>
-        <p class="text-base font-black text-[#1A3B5C]"><span id="stat-tasks-done">0</span>/<span id="stat-tasks-total">0</span></p>
+      <div class="bg-white/10 p-1.5 rounded-lg border border-white/20">
+        <p class="text-[10px] text-[#B1E0F0] font-bold">今日待办</p>
+        <p class="text-base font-black text-white"><span id="stat-tasks-done">0</span>/<span id="stat-tasks-total">0</span></p>
       </div>
     </div>
   </header>
 
   <!-- 主体内容区域 -->
-  <main class="flex-1 mb-16 space-y-4">
+  <main class="flex-1 space-y-4">
 
     <!-- 1. 四象限/时间轴 待办事项板块 -->
     <section id="page-todo" class="tab-page space-y-3">
       <div class="cartoon-card p-3">
         <div class="flex justify-between items-center mb-3">
           <h2 class="font-black text-base text-[#2B7AB3] flex items-center gap-1">📌 今日待办清单</h2>
-          <button onclick="addQuickTodo()" class="cartoon-btn px-2.5 py-1 text-xs">+ 快捷添加</button>
+          <button onclick="addQuickTodo()" class="cartoon-btn-accent px-2.5 py-1 text-xs">+ 快捷添加</button>
         </div>
 
         <!-- 视图切换按钮 -->
-        <div class="flex bg-[#F2ECD2] p-1 rounded-xl border border-[#B1E0F0] mb-3 text-xs font-bold">
-          <button id="view-matrix-btn" onclick="switchTodoView('matrix')" class="flex-1 py-1 rounded-lg bg-[#FFE57C] text-[#1A3B5C]">四象限视图</button>
+        <div class="flex bg-[#B1E0F0]/30 p-1 rounded-xl border border-[#B1E0F0] mb-3 text-xs font-bold">
+          <button id="view-matrix-btn" onclick="switchTodoView('matrix')" class="flex-1 py-1 rounded-lg bg-[#2B7AB3] text-white">四象限视图</button>
           <button id="view-timeline-btn" onclick="switchTodoView('timeline')" class="flex-1 py-1 rounded-lg text-[#2B7AB3]">时间轴视图</button>
         </div>
 
@@ -143,12 +152,10 @@
           <span class="text-xs text-[#2B7AB3] font-bold bg-[#B1E0F0]/30 px-2 py-0.5 rounded-full border border-[#B1E0F0]">历史归档查阅</span>
         </div>
         
-        <!-- 星期表头 -->
         <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-black text-[#2B7AB3] mb-1">
           <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
         </div>
         
-        <!-- 日历网格 -->
         <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
       </div>
 
@@ -215,7 +222,6 @@
           <button onclick="addCustomCategoryPrompt()" class="text-xs text-[#2B7AB3] font-bold bg-[#B1E0F0]/30 px-2 py-1 rounded-lg border border-[#B1E0F0]">+ 新分类</button>
         </div>
 
-        <!-- 记账输入区域 -->
         <div class="space-y-2 text-xs font-bold">
           <div class="grid grid-cols-2 gap-2">
             <select id="fin-type" class="p-1.5 border-2 border-[#B1E0F0] rounded-lg bg-white">
@@ -232,7 +238,6 @@
           <button onclick="saveFinanceRecord()" class="cartoon-btn w-full py-1.5 text-xs">记一笔</button>
         </div>
 
-        <!-- 饼图统计与图例 -->
         <div class="pt-2 border-t border-[#B1E0F0]/40">
           <p class="text-xs font-black text-[#2B7AB3] mb-2">📊 支出分类占比</p>
           <div class="flex items-center justify-between">
@@ -241,7 +246,6 @@
           </div>
         </div>
 
-        <!-- CSV 导出工具 -->
         <div class="pt-2 border-t border-[#B1E0F0]/40 flex justify-between items-center text-xs">
           <span class="font-bold text-gray-500">📥 账单导出:</span>
           <div class="space-x-1">
@@ -251,7 +255,6 @@
           </div>
         </div>
 
-        <!-- 历史明细 -->
         <div id="finance-history-list" class="space-y-1.5 mt-2 max-h-48 overflow-y-auto"></div>
       </div>
     </section>
@@ -262,7 +265,7 @@
       <div class="cartoon-card p-3 space-y-2">
         <h2 class="font-black text-base text-[#2B7AB3]">⚽️ 运动打卡</h2>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <input id="sport-name" type="text" placeholder="运动项目 (例: 跑步/羽毛球)" class="p-1.5 border-2 border-[#B1E0F0] rounded-lg">
+          <input id="sport-name" type="text" placeholder="运动项目" class="p-1.5 border-2 border-[#B1E0F0] rounded-lg">
           <input id="sport-time" type="number" placeholder="时长 (分钟)" value="30" class="p-1.5 border-2 border-[#B1E0F0] rounded-lg">
           <input id="sport-date" type="date" class="p-1.5 border-2 border-[#B1E0F0] rounded-lg">
           <input id="sport-photo" type="file" accept="image/*" class="p-1 text-[10px]">
@@ -317,34 +320,49 @@
       </div>
     </section>
 
-    <!-- 6. 积分商城与日志板块 -->
+    <!-- 6. 新增独立板块：积分中心与商城 -->
     <section id="page-points" class="tab-page hidden space-y-3">
-      <!-- 积分总览与兑换 -->
+      <!-- 手动积分管理卡片 -->
+      <div class="cartoon-card p-3 space-y-3">
+        <h2 class="font-black text-base text-[#2B7AB3] flex items-center justify-between">
+          <span>🎁 积分中心</span>
+          <span class="text-xs text-gray-400 font-normal">可用余额</span>
+        </h2>
+
+        <div class="bg-[#2B7AB3] text-white p-4 rounded-xl flex justify-between items-center border-2 border-[#1A3B5C]">
+          <div>
+            <p class="text-xs text-[#B1E0F0] font-bold">当前可用总积分</p>
+            <p id="points-tab-total" class="text-3xl font-black text-[#FFE57C]">0</p>
+          </div>
+          <!-- 手动增减积分按钮 -->
+          <div class="flex gap-2">
+            <button onclick="quickAdjustPoints(-10)" class="cartoon-btn-accent px-2.5 py-1 text-xs">-10 分</button>
+            <button onclick="quickAdjustPoints(10)" class="cartoon-btn-accent px-2.5 py-1 text-xs">+10 分</button>
+            <button onclick="manualAdjustPoints()" class="cartoon-btn px-2.5 py-1 text-xs bg-[#1A3B5C]">自定义</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 积分兑换商城 -->
       <div class="cartoon-card p-3 space-y-3">
         <div class="flex justify-between items-center">
-          <h2 class="font-black text-base text-[#2B7AB3]">🎁 积分奖励兑换</h2>
-          <button onclick="addRewardPrompt()" class="cartoon-btn px-2 py-0.5 text-xs">+ 新奖励</button>
+          <h3 class="font-black text-sm text-[#2B7AB3]">🛍 积分奖励兑换</h3>
+          <button onclick="addRewardPrompt()" class="cartoon-btn-accent px-2 py-0.5 text-xs">+ 新奖励</button>
         </div>
-
-        <div class="bg-[#FFE57C]/40 p-2.5 rounded-xl border-2 border-[#FFE57C] flex justify-between items-center text-xs font-bold">
-          <span>当前可用总积分：<b id="points-tab-total" class="text-[#2B7AB3] text-sm">0</b> pt</span>
-          <button onclick="manualAdjustPoints()" class="text-[#2B7AB3] underline">手动增减积分</button>
-        </div>
-
         <!-- 奖励列表卡片 -->
         <div id="reward-cards" class="grid grid-cols-2 gap-2"></div>
       </div>
 
-      <!-- 积分日志 -->
+      <!-- 积分变动日志 -->
       <div class="cartoon-card p-3 space-y-2">
         <div class="flex justify-between items-center">
-          <h3 class="font-black text-sm text-[#2B7AB3]">📜 积分流水日志</h3>
-          <span class="text-[10px] font-bold text-gray-500">今日获得: <b id="points-tab-today" class="text-emerald-600">+0</b></span>
+          <h3 class="font-black text-xs text-[#2B7AB3]">📜 积分流水明细</h3>
+          <span class="text-[10px] font-bold text-gray-500">今日已加: <b id="points-tab-today" class="text-emerald-600">+0</b></span>
         </div>
-        <div id="point-log-list" class="space-y-1.5 max-h-56 overflow-y-auto"></div>
+        <div id="point-log-list" class="space-y-1.5 max-h-48 overflow-y-auto"></div>
       </div>
 
-      <!-- 数据备份与管理 -->
+      <!-- 数据备份与重置 -->
       <div class="cartoon-card p-3 space-y-2">
         <h3 class="font-black text-xs text-[#2B7AB3]">⚙️ 数据管理</h3>
         <div class="grid grid-cols-3 gap-2 text-xs">
@@ -356,13 +374,14 @@
     </section>
   </main>
 
-  <!-- 底部固定 Tab 导航栏 -->
-  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-2 border-[#2B7AB3] p-1.5 grid grid-cols-5 gap-1 z-50">
+  <!-- 底部 6 个 Tab 导航栏 (蓝色主调) -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-2 border-[#2B7AB3] p-1.5 grid grid-cols-6 gap-1 z-50">
     <button id="nav-todo" onclick="switchTab('todo')" class="cartoon-btn py-1.5 text-xs active-nav-item">待办</button>
     <button id="nav-calendar" onclick="switchTab('calendar')" class="cartoon-btn py-1.5 text-xs text-[#2B7AB3] bg-white border-none shadow-none">日历</button>
     <button id="nav-habit" onclick="switchTab('habit')" class="cartoon-btn py-1.5 text-xs text-[#2B7AB3] bg-white border-none shadow-none">打卡</button>
     <button id="nav-finance" onclick="switchTab('finance')" class="cartoon-btn py-1.5 text-xs text-[#2B7AB3] bg-white border-none shadow-none">记账</button>
     <button id="nav-life" onclick="switchTab('life')" class="cartoon-btn py-1.5 text-xs text-[#2B7AB3] bg-white border-none shadow-none">手帐</button>
+    <button id="nav-points" onclick="switchTab('points')" class="cartoon-btn py-1.5 text-xs text-[#2B7AB3] bg-white border-none shadow-none">积分</button>
   </nav>
 
   <!-- JavaScript 核心逻辑 -->
@@ -391,9 +410,8 @@
       ]
     };
 
-    let store = JSON.parse(localStorage.getItem('lego_zx_data_v8')) || initialCleanStore;
+    let store = JSON.parse(localStorage.getItem('lego_zx_data_v9')) || initialCleanStore;
 
-    // 隔夜自动清理逻辑
     function checkAndCleanOvernightData() {
       if (!store.lastDate) {
         store.lastDate = todayStr;
@@ -405,7 +423,7 @@
         }
         store.todayPoints = 0;
         store.lastDate = todayStr;
-        localStorage.setItem('lego_zx_data_v8', JSON.stringify(store));
+        localStorage.setItem('lego_zx_data_v9', JSON.stringify(store));
       }
     }
 
@@ -419,15 +437,15 @@
 
     function saveData() {
       store.lastDate = todayStr;
-      localStorage.setItem('lego_zx_data_v8', JSON.stringify(store));
+      localStorage.setItem('lego_zx_data_v9', JSON.stringify(store));
       render();
     }
 
     function resetAllData() {
-      if (confirm("⚠️ 确定要清空所有的积分、待办打卡、记账、运动和 Movie 记录吗？此操作不可撤销！")) {
+      if (confirm("⚠️ 确定要清空所有的积分、待办打卡、记账和记录吗？此操作不可撤销！")) {
         store = JSON.parse(JSON.stringify(initialCleanStore));
         saveData();
-        alert("🧹 所有数据已成功清零！开启全新的自律旅程！");
+        alert("🧹 所有数据已清零！");
       }
     }
 
@@ -454,10 +472,17 @@
       }
     }
 
+    // 手动快速增减积分功能
+    function quickAdjustPoints(val) {
+      const reason = val > 0 ? "手动加分" : "手动扣分";
+      addPointLog(`[${reason}]`, val);
+      saveData();
+    }
+
     function manualAdjustPoints() {
       const reason = prompt("请输入调整原因:", "手动调整");
       if (!reason) return;
-      const amount = parseInt(prompt("请输入变动数值 (扣分为负数，例: -20 或 50):", "-10"));
+      const amount = parseInt(prompt("请输入变动数值 (扣分为负数，如 -20 或 50):", "10"));
       if (isNaN(amount) || amount === 0) return;
 
       addPointLog(`[手动调整] ${reason}`, amount);
@@ -504,12 +529,12 @@
       const timelineBox = document.getElementById('todo-timeline-view');
 
       if (viewType === 'matrix') {
-        matrixBtn.className = "flex-1 py-1 rounded-lg bg-[#FFE57C] text-[#1A3B5C]";
+        matrixBtn.className = "flex-1 py-1 rounded-lg bg-[#2B7AB3] text-white";
         timelineBtn.className = "flex-1 py-1 rounded-lg text-[#2B7AB3]";
         matrixBox.classList.remove('hidden');
         timelineBox.classList.add('hidden');
       } else {
-        timelineBtn.className = "flex-1 py-1 rounded-lg bg-[#FFE57C] text-[#1A3B5C]";
+        timelineBtn.className = "flex-1 py-1 rounded-lg bg-[#2B7AB3] text-white";
         matrixBtn.className = "flex-1 py-1 rounded-lg text-[#2B7AB3]";
         timelineBox.classList.remove('hidden');
         matrixBox.classList.add('hidden');
@@ -587,7 +612,7 @@
       const legendBox = document.getElementById('pie-legend');
 
       if (totalExpense === 0) {
-        ctx.fillStyle = '#F2ECD2';
+        ctx.fillStyle = '#E2E8F0';
         ctx.beginPath();
         ctx.arc(90, 90, 80, 0, Math.PI * 2);
         ctx.fill();
@@ -599,7 +624,6 @@
         return;
       }
 
-      // 图片提取的新配色主题
       const colors = ['#2B7AB3', '#FFE57C', '#B1E0F0', '#F2ECD2', '#60A5FA', '#F59E0B'];
       let startAngle = 0;
       let legendHTML = '';
@@ -896,10 +920,11 @@
       saveData();
     }
 
+    // 兑换积分奖励
     function redeemReward(cost, name) {
       if (store.totalPoints >= cost) {
         addPointLog(`[兑换奖励] ${name}`, -cost);
-        alert(`🎉 成功兑换: ${name}！已经扣除 ${cost} 积分`);
+        alert(`🎉 成功兑换: ${name}！已自动扣除 ${cost} 积分`);
         saveData();
       } else {
         alert(`⚠️ 积分不足！还差 ${cost - store.totalPoints} 积分。`);
@@ -910,7 +935,7 @@
       const icon = prompt("图标 Emoji:", "🎁") || "🎁";
       const name = prompt("奖励名称:", "");
       if (!name) return;
-      const cost = parseInt(prompt("需要积分:", "100")) || 100;
+      const cost = parseInt(prompt("所需兑换积分:", "50")) || 50;
       store.rewards.push({ id: Date.now(), icon, name, cost });
       saveData();
     }
@@ -923,7 +948,7 @@
     function exportData() {
       const jsonStr = JSON.stringify(store);
       navigator.clipboard.writeText(jsonStr).then(() => {
-        alert("📋 数据备份已复制到剪贴板！您可以粘贴保存到备忘录。");
+        alert("📋 数据备份已复制到剪贴板！");
       }).catch(() => {
         prompt("请复制下方代码进行备份：", jsonStr);
       });
@@ -938,7 +963,7 @@
           saveData();
           alert("🎉 数据导入成功！");
         } catch (e) {
-          alert("⚠️ 导入失败，代码格式不正确！");
+          alert("⚠️ 导入失败，格式错误！");
         }
       }
     }
@@ -1196,7 +1221,7 @@
                 <button onclick="deleteBook(${b.id})" class="text-gray-300 hover:text-red-500">×</button>
               </div>
             </div>
-            <div class="w-full bg-[#F2ECD2] h-3 rounded-full border border-[#B1E0F0] overflow-hidden">
+            <div class="w-full bg-slate-100 h-3 rounded-full border border-[#B1E0F0] overflow-hidden">
               <div class="bg-[#FFE57C] h-full" style="width: ${percent}%"></div>
             </div>
             <p class="text-[10px] text-gray-500">已读 ${b.read} / ${b.total} 页</p>
@@ -1212,7 +1237,7 @@
             <p class="font-extrabold text-[#1A3B5C]">${r.name}</p>
             <p class="text-xs font-black text-[#2B7AB3] mt-0.5">⭐️ ${r.cost} pts</p>
           </div>
-          <button onclick="redeemReward(${r.cost}, '${r.name}')" class="cartoon-btn py-1 text-xs">兑换</button>
+          <button onclick="redeemReward(${r.cost}, '${r.name}')" class="cartoon-btn-accent py-1 text-xs">兑换</button>
         </div>
       `).join('') : '<p class="text-xs text-gray-400 italic col-span-2 text-center py-2">暂无可用奖品</p>';
     }
