@@ -7,83 +7,83 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 蓝色系像素卡片风格 */
+    /* 明亮暖黄像素卡片风格 */
     body {
-      background-color: #F0F7FF;
+      background-color: #FEFCE8;
       color: #1E293B;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     .cartoon-card {
       background-color: #FFFFFF;
-      border: 2px solid #3157A4;
-      box-shadow: 4px 4px 0px #3157A4;
+      border: 2px solid #EAB308;
+      box-shadow: 4px 4px 0px #EAB308;
       border-radius: 1rem;
       transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
     .cartoon-btn {
-      background-color: #3157A4;
-      color: #FFFFFF;
-      border: 2px solid #1E3A8A;
-      box-shadow: 2px 2px 0px #1E3A8A;
+      background-color: #EAB308;
+      color: #000000;
+      border: 2px solid #CA8A04;
+      box-shadow: 2px 2px 0px #CA8A04;
       border-radius: 0.5rem;
       font-weight: bold;
       transition: all 0.1s ease;
     }
     .cartoon-btn:active {
       transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px #1E3A8A;
+      box-shadow: 0px 0px 0px #CA8A04;
     }
     .active-nav-item {
-      background-color: #3157A4 !important;
-      color: #FFFFFF !important;
-      border-color: #1E3A8A !important;
-      box-shadow: 2px 2px 0px #1E3A8A !important;
+      background-color: #EAB308 !important;
+      color: #000000 !important;
+      border-color: #CA8A04 !important;
+      box-shadow: 2px 2px 0px #CA8A04 !important;
     }
     .calendar-day-btn {
       aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #93C5FD;
+      border: 1px solid #FDE047;
       border-radius: 0.375rem;
       font-size: 0.75rem;
       font-weight: bold;
       background-color: #FFFFFF;
     }
     .calendar-day-selected {
-      background-color: #2563EB !important;
-      color: #FFFFFF !important;
-      border-color: #1E3A8A !important;
+      background-color: #EAB308 !important;
+      color: #000000 !important;
+      border-color: #CA8A04 !important;
     }
   </style>
 </head>
 <body class="p-2 sm:p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between">
 
   <!-- 顶部 Header 板块 -->
-  <header class="cartoon-card p-4 mb-4 bg-gradient-to-r from-[#3157A4] to-[#2563EB] text-white">
+  <header class="cartoon-card p-4 mb-4 bg-gradient-to-r from-[#FACC15] to-[#EAB308] text-slate-900 border-[#CA8A04]">
     <div class="flex justify-between items-center mb-2">
       <div>
         <h1 class="text-xl font-black tracking-wide">🧩 LegoZX Dashboard</h1>
-        <p id="header-time" class="text-xs text-blue-100 font-bold mt-0.5">加载中...</p>
+        <p id="header-time" class="text-xs text-yellow-950 font-bold mt-0.5">加载中...</p>
       </div>
       <div class="text-right">
-        <span id="clock-display" class="text-2xl font-black tracking-wider bg-white/20 px-2 py-1 rounded-lg">00:00</span>
+        <span id="clock-display" class="text-2xl font-black tracking-wider bg-black/10 px-2 py-1 rounded-lg">00:00</span>
       </div>
     </div>
     
     <!-- 统计卡片条 -->
-    <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-white/20 text-center">
-      <div class="bg-white/10 p-1.5 rounded-lg">
-        <p class="text-[10px] text-blue-100 font-bold">可用总积分</p>
-        <p id="stat-total-pts" class="text-base font-black text-yellow-300">0</p>
+    <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-black/10 text-center">
+      <div class="bg-white/40 p-1.5 rounded-lg border border-black/5">
+        <p class="text-[10px] text-yellow-950 font-bold">可用总积分</p>
+        <p id="stat-total-pts" class="text-base font-black text-amber-900">0</p>
       </div>
-      <div class="bg-white/10 p-1.5 rounded-lg">
-        <p class="text-[10px] text-blue-100 font-bold">今日收益</p>
-        <p id="stat-today-pts" class="text-base font-black text-emerald-300">+0</p>
+      <div class="bg-white/40 p-1.5 rounded-lg border border-black/5">
+        <p class="text-[10px] text-yellow-950 font-bold">今日收益</p>
+        <p id="stat-today-pts" class="text-base font-black text-emerald-800">+0</p>
       </div>
-      <div class="bg-white/10 p-1.5 rounded-lg">
-        <p class="text-[10px] text-blue-100 font-bold">今日待办</p>
-        <p class="text-base font-black text-white"><span id="stat-tasks-done">0</span>/<span id="stat-tasks-total">0</span></p>
+      <div class="bg-white/40 p-1.5 rounded-lg border border-black/5">
+        <p class="text-[10px] text-yellow-950 font-bold">今日待办</p>
+        <p class="text-base font-black text-slate-900"><span id="stat-tasks-done">0</span>/<span id="stat-tasks-total">0</span></p>
       </div>
     </div>
   </header>
@@ -95,14 +95,14 @@
     <section id="page-todo" class="tab-page space-y-3">
       <div class="cartoon-card p-3">
         <div class="flex justify-between items-center mb-3">
-          <h2 class="font-black text-base text-[#3157A4] flex items-center gap-1">📌 今日待办清单</h2>
+          <h2 class="font-black text-base text-amber-700 flex items-center gap-1">📌 今日待办清单</h2>
           <button onclick="addQuickTodo()" class="cartoon-btn px-2.5 py-1 text-xs">+ 快捷添加</button>
         </div>
 
         <!-- 视图切换按钮 -->
-        <div class="flex bg-blue-50 p-1 rounded-xl border border-blue-200 mb-3 text-xs font-bold">
-          <button id="view-matrix-btn" onclick="switchTodoView('matrix')" class="flex-1 py-1 rounded-lg bg-[#3157A4] text-white">四象限视图</button>
-          <button id="view-timeline-btn" onclick="switchTodoView('timeline')" class="flex-1 py-1 rounded-lg text-blue-800">时间轴视图</button>
+        <div class="flex bg-yellow-50 p-1 rounded-xl border border-yellow-200 mb-3 text-xs font-bold">
+          <button id="view-matrix-btn" onclick="switchTodoView('matrix')" class="flex-1 py-1 rounded-lg bg-[#EAB308] text-slate-900">四象限视图</button>
+          <button id="view-timeline-btn" onclick="switchTodoView('timeline')" class="flex-1 py-1 rounded-lg text-yellow-900">时间轴视图</button>
         </div>
 
         <!-- 四象限视图 -->
@@ -111,12 +111,12 @@
             <span class="text-[11px] font-black text-red-600 block mb-1">🔥 1. 紧急且重要</span>
             <div id="quad-1" class="space-y-1.5"></div>
           </div>
-          <div class="border-2 border-blue-200 bg-blue-50/50 p-2 rounded-xl">
-            <span class="text-[11px] font-black text-blue-600 block mb-1">🎯 2. 重要不紧急</span>
+          <div class="border-2 border-amber-200 bg-amber-50/50 p-2 rounded-xl">
+            <span class="text-[11px] font-black text-amber-700 block mb-1">🎯 2. 重要不紧急</span>
             <div id="quad-2" class="space-y-1.5"></div>
           </div>
-          <div class="border-2 border-amber-200 bg-amber-50/50 p-2 rounded-xl">
-            <span class="text-[11px] font-black text-amber-600 block mb-1">⚡️ 3. 紧急不重要</span>
+          <div class="border-2 border-yellow-200 bg-yellow-50/50 p-2 rounded-xl">
+            <span class="text-[11px] font-black text-yellow-700 block mb-1">⚡️ 3. 紧急不重要</span>
             <div id="quad-3" class="space-y-1.5"></div>
           </div>
           <div class="border-2 border-slate-200 bg-slate-50/50 p-2 rounded-xl">
@@ -136,12 +136,12 @@
     <section id="page-calendar" class="tab-page hidden space-y-3">
       <div class="cartoon-card p-3">
         <div class="flex justify-between items-center mb-2">
-          <h2 id="calendar-month-title" class="font-black text-base text-[#3157A4]">2026年 9月</h2>
-          <span class="text-xs text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">历史归档查阅</span>
+          <h2 id="calendar-month-title" class="font-black text-base text-amber-700">2026年 9月</h2>
+          <span class="text-xs text-yellow-900 font-bold bg-yellow-50 px-2 py-0.5 rounded-full border border-yellow-200">历史归档查阅</span>
         </div>
         
         <!-- 星期表头 -->
-        <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-black text-blue-800 mb-1">
+        <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-black text-amber-800 mb-1">
           <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
         </div>
         
@@ -151,16 +151,16 @@
 
       <!-- 选中日期详情卡片 -->
       <div class="cartoon-card p-3 space-y-2">
-        <div class="flex justify-between items-center border-b pb-1.5 border-blue-100">
-          <h3 class="font-black text-sm text-[#3157A4]">📅 <span id="selected-date-label">今日</span> 记录</h3>
-          <span id="selected-date-pts-badge" class="text-xs font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">积分: +0 pt</span>
+        <div class="flex justify-between items-center border-b pb-1.5 border-yellow-100">
+          <h3 class="font-black text-sm text-amber-700">📅 <span id="selected-date-label">今日</span> 记录</h3>
+          <span id="selected-date-pts-badge" class="text-xs font-black text-yellow-900 bg-yellow-50 px-2 py-0.5 rounded-md border border-yellow-200">积分: +0 pt</span>
         </div>
         
         <div class="space-y-2">
-          <p class="text-[11px] font-black text-blue-800">✅ 归档已完成待办：</p>
+          <p class="text-[11px] font-black text-amber-800">✅ 归档已完成待办：</p>
           <div id="calendar-todo-list" class="space-y-1 max-h-36 overflow-y-auto"></div>
           
-          <p class="text-[11px] font-black text-blue-800 pt-1">💰 积分收支明细：</p>
+          <p class="text-[11px] font-black text-amber-800 pt-1">💰 积分收支明细：</p>
           <div id="calendar-point-list" class="space-y-1 max-h-36 overflow-y-auto"></div>
         </div>
       </div>
@@ -171,7 +171,7 @@
       <!-- 每日习惯打卡 -->
       <div class="cartoon-card p-3">
         <div class="flex justify-between items-center mb-2">
-          <h2 class="font-black text-base text-[#3157A4]">🌱 习惯打卡</h2>
+          <h2 class="font-black text-base text-amber-700">🌱 习惯打卡</h2>
           <button onclick="addNewHabitPrompt()" class="cartoon-btn px-2 py-0.5 text-xs">+ 新习惯</button>
         </div>
         <div id="habit-list" class="space-y-2"></div>
@@ -179,12 +179,12 @@
 
       <!-- 学习专注打卡 -->
       <div class="cartoon-card p-3 space-y-2">
-        <h2 class="font-black text-base text-[#3157A4]">📖 学习专注记录</h2>
+        <h2 class="font-black text-base text-amber-700">📖 学习专注记录</h2>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <input id="study-icon" type="text" placeholder="图标 (例 📝)" value="📝" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="study-subject" type="text" placeholder="科目/领域" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="study-time" type="number" placeholder="时长 (分钟)" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="study-pts" type="number" placeholder="获得积分" value="15" class="p-1.5 border-2 border-blue-200 rounded-lg">
+          <input id="study-icon" type="text" placeholder="图标 (例 📝)" value="📝" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="study-subject" type="text" placeholder="科目/领域" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="study-time" type="number" placeholder="时长 (分钟)" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="study-pts" type="number" placeholder="获得积分" value="15" class="p-1.5 border-2 border-yellow-200 rounded-lg">
         </div>
         <button onclick="recordStudy()" class="cartoon-btn w-full py-1.5 text-xs">打卡学习完成</button>
         <div id="study-history" class="space-y-1.5 mt-2"></div>
@@ -192,12 +192,12 @@
 
       <!-- 阅读进度追踪 -->
       <div class="cartoon-card p-3 space-y-2">
-        <h2 class="font-black text-base text-[#3157A4]">📚 读书进度</h2>
+        <h2 class="font-black text-base text-amber-700">📚 读书进度</h2>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <input id="book-icon" type="text" placeholder="图标" value="📖" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="book-title" type="text" placeholder="书名" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="book-read-pages" type="number" placeholder="已读页数" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="book-total-pages" type="number" placeholder="总页数" class="p-1.5 border-2 border-blue-200 rounded-lg">
+          <input id="book-icon" type="text" placeholder="图标" value="📖" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="book-title" type="text" placeholder="书名" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="book-read-pages" type="number" placeholder="已读页数" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="book-total-pages" type="number" placeholder="总页数" class="p-1.5 border-2 border-yellow-200 rounded-lg">
         </div>
         <button onclick="addBookProgress()" class="cartoon-btn w-full py-1.5 text-xs">更新阅读进度</button>
         <div id="book-list" class="space-y-2 mt-2"></div>
@@ -208,30 +208,30 @@
     <section id="page-finance" class="tab-page hidden space-y-3">
       <div class="cartoon-card p-3 space-y-3">
         <div class="flex justify-between items-center">
-          <h2 class="font-black text-base text-[#3157A4]">💵 极简记账</h2>
-          <button onclick="addCustomCategoryPrompt()" class="text-xs text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded-lg border border-blue-200">+ 新分类</button>
+          <h2 class="font-black text-base text-amber-700">💵 极简记账</h2>
+          <button onclick="addCustomCategoryPrompt()" class="text-xs text-yellow-900 font-bold bg-yellow-50 px-2 py-1 rounded-lg border border-yellow-200">+ 新分类</button>
         </div>
 
         <!-- 记账输入区域 -->
         <div class="space-y-2 text-xs font-bold">
           <div class="grid grid-cols-2 gap-2">
-            <select id="fin-type" class="p-1.5 border-2 border-blue-200 rounded-lg bg-white">
+            <select id="fin-type" class="p-1.5 border-2 border-yellow-200 rounded-lg bg-white">
               <option value="expense">支出 (-)</option>
               <option value="income">收入 (+)</option>
             </select>
-            <input id="fin-amount" type="number" step="0.01" placeholder="金额" class="p-1.5 border-2 border-blue-200 rounded-lg">
+            <input id="fin-amount" type="number" step="0.01" placeholder="金额" class="p-1.5 border-2 border-yellow-200 rounded-lg">
           </div>
           <div class="grid grid-cols-2 gap-2">
-            <select id="fin-category" class="p-1.5 border-2 border-blue-200 rounded-lg bg-white"></select>
-            <input id="fin-date" type="date" class="p-1.5 border-2 border-blue-200 rounded-lg">
+            <select id="fin-category" class="p-1.5 border-2 border-yellow-200 rounded-lg bg-white"></select>
+            <input id="fin-date" type="date" class="p-1.5 border-2 border-yellow-200 rounded-lg">
           </div>
-          <input id="fin-[#3157A4]" type="text" placeholder="备注说明 (选填)" class="w-full p-1.5 border-2 border-blue-200 rounded-lg">
+          <input id="fin-note" type="text" placeholder="备注说明 (选填)" class="w-full p-1.5 border-2 border-yellow-200 rounded-lg">
           <button onclick="saveFinanceRecord()" class="cartoon-btn w-full py-1.5 text-xs">记一笔</button>
         </div>
 
         <!-- 饼图统计与图例 -->
-        <div class="pt-2 border-t border-blue-100">
-          <p class="text-xs font-black text-blue-900 mb-2">📊 支出分类占比</p>
+        <div class="pt-2 border-t border-yellow-100">
+          <p class="text-xs font-black text-amber-900 mb-2">📊 支出分类占比</p>
           <div class="flex items-center justify-between">
             <canvas id="financePieChart" width="180" height="180" class="mx-auto"></canvas>
             <div id="pie-legend" class="text-[10px] space-y-1 flex-1 pl-2 font-bold max-h-40 overflow-y-auto"></div>
@@ -239,12 +239,12 @@
         </div>
 
         <!-- CSV 导出工具 -->
-        <div class="pt-2 border-t border-blue-100 flex justify-between items-center text-xs">
+        <div class="pt-2 border-t border-yellow-100 flex justify-between items-center text-xs">
           <span class="font-bold text-gray-500">📥 账单导出:</span>
           <div class="space-x-1">
-            <button onclick="exportFinanceCSV('daily')" class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded border border-blue-300 font-bold text-[10px]">今日</button>
-            <button onclick="exportFinanceCSV('weekly')" class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded border border-blue-300 font-bold text-[10px]">本周</button>
-            <button onclick="exportFinanceCSV('monthly')" class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded border border-blue-300 font-bold text-[10px]">本月</button>
+            <button onclick="exportFinanceCSV('daily')" class="px-2 py-0.5 bg-yellow-50 text-yellow-900 rounded border border-yellow-300 font-bold text-[10px]">今日</button>
+            <button onclick="exportFinanceCSV('weekly')" class="px-2 py-0.5 bg-yellow-50 text-yellow-900 rounded border border-yellow-300 font-bold text-[10px]">本周</button>
+            <button onclick="exportFinanceCSV('monthly')" class="px-2 py-0.5 bg-yellow-50 text-yellow-900 rounded border border-yellow-300 font-bold text-[10px]">本月</button>
           </div>
         </div>
 
@@ -257,58 +257,58 @@
     <section id="page-life" class="tab-page hidden space-y-3">
       <!-- 运动打卡 -->
       <div class="cartoon-card p-3 space-y-2">
-        <h2 class="font-black text-base text-[#3157A4]">⚽️ 运动打卡</h2>
+        <h2 class="font-black text-base text-amber-700">⚽️ 运动打卡</h2>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <input id="sport-name" type="text" placeholder="运动项目 (例: 跑步/羽毛球)" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="sport-time" type="number" placeholder="时长 (分钟)" value="30" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <input id="sport-date" type="date" class="p-1.5 border-2 border-blue-200 rounded-lg">
+          <input id="sport-name" type="text" placeholder="运动项目 (例: 跑步/羽毛球)" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="sport-time" type="number" placeholder="时长 (分钟)" value="30" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="sport-date" type="date" class="p-1.5 border-2 border-yellow-200 rounded-lg">
           <input id="sport-photo" type="file" accept="image/*" class="p-1 text-[10px]">
         </div>
-        <input id="sport-comment" type="text" placeholder="心得 / 消耗卡路里..." class="w-full p-1.5 border-2 border-blue-200 rounded-lg text-xs font-bold">
+        <input id="sport-comment" type="text" placeholder="心得 / 消耗卡路里..." class="w-full p-1.5 border-2 border-yellow-200 rounded-lg text-xs font-bold">
         <button onclick="saveSportRecord()" class="cartoon-btn w-full py-1.5 text-xs">保存运动打卡 (+15pt)</button>
         <div id="sport-history-list" class="space-y-2 mt-2"></div>
       </div>
 
       <!-- Movie 观影手帐 -->
       <div class="cartoon-card p-3 space-y-2">
-        <h2 class="font-black text-base text-[#3157A4]">🎬 Movie 观影手帐</h2>
+        <h2 class="font-black text-base text-amber-700">🎬 Movie 观影手帐</h2>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <input id="movie-name" type="text" placeholder="影视名称" class="p-1.5 border-2 border-[#93C5FD] rounded-lg">
-          <input id="movie-duration" type="number" placeholder="时长 (分钟)" value="120" class="p-1.5 border-2 border-blue-200 rounded-lg">
-          <select id="movie-rating" class="p-1.5 border-2 border-blue-200 rounded-lg bg-white">
+          <input id="movie-name" type="text" placeholder="影视名称" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <input id="movie-duration" type="number" placeholder="时长 (分钟)" value="120" class="p-1.5 border-2 border-yellow-200 rounded-lg">
+          <select id="movie-rating" class="p-1.5 border-2 border-yellow-200 rounded-lg bg-white">
             <option value="⭐️⭐️⭐️⭐️⭐️">⭐️⭐️⭐️⭐️⭐️ (力荐)</option>
             <option value="⭐️⭐️⭐️⭐️">⭐️⭐️⭐️⭐️ (推荐)</option>
             <option value="⭐️⭐️⭐️">⭐️⭐️⭐️ (还行)</option>
             <option value="⭐️⭐️">⭐️⭐️ (一般)</option>
             <option value="⭐️">⭐️ (吐槽)</option>
           </select>
-          <input id="movie-date" type="date" class="p-1.5 border-2 border-blue-200 rounded-lg">
+          <input id="movie-date" type="date" class="p-1.5 border-2 border-yellow-200 rounded-lg">
         </div>
         <input id="movie-photo" type="file" accept="image/*" class="p-1 text-[10px] w-full">
-        <textarea id="movie-review" placeholder="短评 / 经典台词..." class="w-full p-1.5 border-2 border-blue-200 rounded-lg text-xs font-bold h-16"></textarea>
+        <textarea id="movie-review" placeholder="短评 / 经典台词..." class="w-full p-1.5 border-2 border-yellow-200 rounded-lg text-xs font-bold h-16"></textarea>
         <button onclick="saveMovieRecord()" class="cartoon-btn w-full py-1.5 text-xs">存入观影手帐 (+10pt)</button>
         <div id="movie-history-list" class="space-y-2 mt-2"></div>
       </div>
 
       <!-- 随手日记 -->
       <div class="cartoon-card p-3 space-y-2">
-        <h2 class="font-black text-base text-[#3157A4]">✍️ 心情日记</h2>
+        <h2 class="font-black text-base text-amber-700">✍️ 心情日记</h2>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <select id="diary-mood" class="p-1.5 border-2 border-blue-200 rounded-lg bg-white">
+          <select id="diary-mood" class="p-1.5 border-2 border-yellow-200 rounded-lg bg-white">
             <option value="😄 开心">😄 开心</option>
             <option value="😌 平静">😌 平静</option>
             <option value="🔥 充实">🔥 充实</option>
             <option value="疲惫">疲惫</option>
             <option value="🌧 沮丧">🌧 沮丧</option>
           </select>
-          <select id="diary-weather" class="p-1.5 border-2 border-blue-200 rounded-lg bg-white">
+          <select id="diary-weather" class="p-1.5 border-2 border-yellow-200 rounded-lg bg-white">
             <option value="☀️ 晴朗">☀️ 晴朗</option>
             <option value="⛅️ 多云">⛅️ 多云</option>
             <option value="🌧 下雨">🌧 下雨</option>
             <option value="❄️ 下雪">❄️ 下雪</option>
           </select>
         </div>
-        <textarea id="diary-content" placeholder="写下今天发生的故事或感悟..." class="w-full p-1.5 border-2 border-blue-200 rounded-lg text-xs font-bold h-20"></textarea>
+        <textarea id="diary-content" placeholder="写下今天发生的故事或感悟..." class="w-full p-1.5 border-2 border-yellow-200 rounded-lg text-xs font-bold h-20"></textarea>
         <button onclick="saveDiary()" class="cartoon-btn w-full py-1.5 text-xs">保存日记 (+5pt)</button>
         <div id="diary-history" class="space-y-2 mt-2"></div>
       </div>
@@ -319,13 +319,13 @@
       <!-- 积分总览与兑换 -->
       <div class="cartoon-card p-3 space-y-3">
         <div class="flex justify-between items-center">
-          <h2 class="font-black text-base text-[#3157A4]">🎁 积分奖励兑换</h2>
+          <h2 class="font-black text-base text-amber-700">🎁 积分奖励兑换</h2>
           <button onclick="addRewardPrompt()" class="cartoon-btn px-2 py-0.5 text-xs">+ 新奖励</button>
         </div>
 
-        <div class="bg-blue-50 p-2.5 rounded-xl border-2 border-blue-200 flex justify-between items-center text-xs font-bold">
-          <span>当前可用总积分：<b id="points-tab-total" class="text-blue-700 text-sm">0</b> pt</span>
-          <button onclick="manualAdjustPoints()" class="text-[#3157A4] underline">手动增减积分</button>
+        <div class="bg-yellow-50 p-2.5 rounded-xl border-2 border-yellow-200 flex justify-between items-center text-xs font-bold">
+          <span>当前可用总积分：<b id="points-tab-total" class="text-amber-700 text-sm">0</b> pt</span>
+          <button onclick="manualAdjustPoints()" class="text-amber-800 underline">手动增减积分</button>
         </div>
 
         <!-- 奖励列表卡片 -->
@@ -335,7 +335,7 @@
       <!-- 积分日志 -->
       <div class="cartoon-card p-3 space-y-2">
         <div class="flex justify-between items-center">
-          <h3 class="font-black text-sm text-[#3157A4]">📜 积分流水日志</h3>
+          <h3 class="font-black text-sm text-amber-700">📜 积分流水日志</h3>
           <span class="text-[10px] font-bold text-gray-500">今日获得: <b id="points-tab-today" class="text-emerald-600">+0</b></span>
         </div>
         <div id="point-log-list" class="space-y-1.5 max-h-56 overflow-y-auto"></div>
@@ -343,10 +343,10 @@
 
       <!-- 数据备份与管理 -->
       <div class="cartoon-card p-3 space-y-2">
-        <h3 class="font-black text-xs text-blue-900">⚙️ 数据管理</h3>
+        <h3 class="font-black text-xs text-amber-900">⚙️ 数据管理</h3>
         <div class="grid grid-cols-3 gap-2 text-xs">
-          <button onclick="exportData()" class="px-2 py-1.5 bg-blue-50 text-blue-700 border border-blue-300 rounded-lg font-bold">备份数据</button>
-          <button onclick="importData()" class="px-2 py-1.5 bg-blue-50 text-blue-700 border border-blue-300 rounded-lg font-bold">恢复数据</button>
+          <button onclick="exportData()" class="px-2 py-1.5 bg-yellow-50 text-yellow-900 border border-yellow-300 rounded-lg font-bold">备份数据</button>
+          <button onclick="importData()" class="px-2 py-1.5 bg-yellow-50 text-yellow-900 border border-yellow-300 rounded-lg font-bold">恢复数据</button>
           <button onclick="resetAllData()" class="px-2 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg font-bold">重置清空</button>
         </div>
       </div>
@@ -354,22 +354,22 @@
   </main>
 
   <!-- 底部固定 Tab 导航栏 -->
-  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-2 border-[#3157A4] p-1.5 grid grid-cols-5 gap-1 z-50">
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t-2 border-[#EAB308] p-1.5 grid grid-cols-5 gap-1 z-50">
     <button id="nav-todo" onclick="switchTab('todo')" class="cartoon-btn py-1.5 text-xs active-nav-item">待办</button>
-    <button id="nav-calendar" onclick="switchTab('calendar')" class="cartoon-btn py-1.5 text-xs text-[#3157A4] bg-white border-none shadow-none">日历</button>
-    <button id="nav-habit" onclick="switchTab('habit')" class="cartoon-btn py-1.5 text-xs text-[#3157A4] bg-white border-none shadow-none">打卡</button>
-    <button id="nav-finance" onclick="switchTab('finance')" class="cartoon-btn py-1.5 text-xs text-[#3157A4] bg-white border-none shadow-none">记账</button>
-    <button id="nav-life" onclick="switchTab('life')" class="cartoon-btn py-1.5 text-xs text-[#3157A4] bg-white border-none shadow-none">手帐</button>
+    <button id="nav-calendar" onclick="switchTab('calendar')" class="cartoon-btn py-1.5 text-xs text-amber-900 bg-white border-none shadow-none">日历</button>
+    <button id="nav-habit" onclick="switchTab('habit')" class="cartoon-btn py-1.5 text-xs text-amber-900 bg-white border-none shadow-none">打卡</button>
+    <button id="nav-finance" onclick="switchTab('finance')" class="cartoon-btn py-1.5 text-xs text-amber-900 bg-white border-none shadow-none">记账</button>
+    <button id="nav-life" onclick="switchTab('life')" class="cartoon-btn py-1.5 text-xs text-amber-900 bg-white border-none shadow-none">手帐</button>
   </nav>
 
-  <!-- 包含隔夜自动清理逻辑的全量 JavaScript 代码 -->
+  <!-- JavaScript 核心逻辑 -->
   <script>
     let currentTodoView = 'matrix';
     const todayStr = new Date().toISOString().split('T')[0];
     let selectedCalendarDate = todayStr;
 
     const initialCleanStore = {
-      lastDate: todayStr, // 记录最后一次打开页面的日期
+      lastDate: todayStr,
       totalPoints: 0,
       todayPoints: 0,
       pointLogs: [],
@@ -390,32 +390,23 @@
 
     let store = JSON.parse(localStorage.getItem('lego_zx_data_v8')) || initialCleanStore;
 
-    // ==================== 隔夜自动清理核心逻辑 ====================
+    // 隔夜自动清理逻辑
     function checkAndCleanOvernightData() {
-      // 兼容旧数据中没有 lastDate 的情况
       if (!store.lastDate) {
         store.lastDate = todayStr;
       }
 
-      // 如果当前日期不等于上一次保存的日期（说明发生了跨天）
       if (store.lastDate !== todayStr) {
-        // 1. 自动清理隔夜未完成的待办事项 (done: false)，仅保留已完成的 (done: true) 归档在历史日历中
+        // 自动清理未完成的隔夜待办，保留已完成归档
         if (store.todos && store.todos.length > 0) {
           store.todos = store.todos.filter(todo => todo.done === true);
         }
-
-        // 2. 重置每日积分统计（累计总积分 totalPoints 保持不变）
         store.todayPoints = 0;
-
-        // 3. 更新系统最后记录日期为今天
         store.lastDate = todayStr;
-
-        // 保存清理后的数据
         localStorage.setItem('lego_zx_data_v8', JSON.stringify(store));
       }
     }
 
-    // 页面加载时优先运行隔夜清理检测
     checkAndCleanOvernightData();
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -487,7 +478,7 @@
 
       document.querySelectorAll('nav button').forEach(el => {
         el.classList.remove('active-nav-item');
-        el.classList.add('text-[#3157A4]');
+        el.classList.add('text-amber-900');
         el.style.backgroundColor = 'transparent';
         el.style.borderColor = 'transparent';
         el.style.boxShadow = 'none';
@@ -495,7 +486,7 @@
       const activeBtn = document.getElementById(`nav-${tabKey}`);
       if(activeBtn) {
         activeBtn.classList.add('active-nav-item');
-        activeBtn.classList.remove('text-[#3157A4]');
+        activeBtn.classList.remove('text-amber-900');
       }
 
       if (tabKey === 'finance') {
@@ -511,13 +502,13 @@
       const timelineBox = document.getElementById('todo-timeline-view');
 
       if (viewType === 'matrix') {
-        matrixBtn.className = "flex-1 py-1 rounded-lg bg-[#3157A4] text-white";
-        timelineBtn.className = "flex-1 py-1 rounded-lg text-blue-800";
+        matrixBtn.className = "flex-1 py-1 rounded-lg bg-[#EAB308] text-slate-900";
+        timelineBtn.className = "flex-1 py-1 rounded-lg text-yellow-900";
         matrixBox.classList.remove('hidden');
         timelineBox.classList.add('hidden');
       } else {
-        timelineBtn.className = "flex-1 py-1 rounded-lg bg-[#3157A4] text-white";
-        matrixBtn.className = "flex-1 py-1 rounded-lg text-blue-800";
+        timelineBtn.className = "flex-1 py-1 rounded-lg bg-[#EAB308] text-slate-900";
+        matrixBtn.className = "flex-1 py-1 rounded-lg text-yellow-900";
         timelineBox.classList.remove('hidden');
         matrixBox.classList.add('hidden');
       }
@@ -548,7 +539,7 @@
       const amount = parseFloat(document.getElementById('fin-amount').value);
       const category = document.getElementById('fin-category').value;
       const date = document.getElementById('fin-date').value || todayStr;
-      const note = document.getElementById('fin-[#3157A4]').value.trim();
+      const note = document.getElementById('fin-note').value.trim();
 
       if (isNaN(amount) || amount <= 0) {
         alert("请输入有效的金额！");
@@ -565,7 +556,7 @@
       });
 
       document.getElementById('fin-amount').value = "";
-      document.getElementById('fin-[#3157A4]').value = "";
+      document.getElementById('fin-note').value = "";
 
       addPointLog(`[记账] ${category} ${amount}元`, 2);
       saveData();
@@ -594,11 +585,11 @@
       const legendBox = document.getElementById('pie-legend');
 
       if (totalExpense === 0) {
-        ctx.fillStyle = '#E2E8F0';
+        ctx.fillStyle = '#FEF08A';
         ctx.beginPath();
         ctx.arc(90, 90, 80, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#94A3B8';
+        ctx.fillStyle = '#854D0E';
         ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('暂无支出', 90, 95);
@@ -606,8 +597,8 @@
         return;
       }
 
-      // 蓝色系及对比辅助色调
-      const colors = ['#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#1D4ED8', '#0284C7', '#38BDF8'];
+      // 暖黄主题配套色系
+      const colors = ['#EAB308', '#F59E0B', '#FACC15', '#D97706', '#B45309', '#78350F', '#FEF08A'];
       let startAngle = 0;
       let legendHTML = '';
       let colorIdx = 0;
@@ -629,10 +620,10 @@
 
         const pct = Math.round((amt / totalExpense) * 100);
         legendHTML += `
-          <div class="flex items-center gap-1.5 bg-blue-50/50 p-1 rounded border border-blue-200">
+          <div class="flex items-center gap-1.5 bg-yellow-50/50 p-1 rounded border border-yellow-200">
             <span class="w-2.5 h-2.5 rounded-full" style="background:${currentColor}"></span>
             <span class="truncate flex-1">${cat}</span>
-            <span class="text-blue-700">${pct}%</span>
+            <span class="text-yellow-950">${pct}%</span>
           </div>
         `;
 
@@ -941,7 +932,7 @@
       if (jsonStr) {
         try {
           store = JSON.parse(jsonStr);
-          checkAndCleanOvernightData(); // 导入数据后检测隔夜状态
+          checkAndCleanOvernightData();
           saveData();
           alert("🎉 数据导入成功！");
         } catch (e) {
@@ -990,9 +981,9 @@
       const todoBox = document.getElementById('calendar-todo-list');
       if (dayTodos.length > 0) {
         todoBox.innerHTML = dayTodos.map(t => `
-          <div class="flex justify-between items-center p-2 bg-blue-50/60 border border-blue-200 rounded-lg">
+          <div class="flex justify-between items-center p-2 bg-yellow-50/60 border border-yellow-200 rounded-lg">
             <span class="${t.done ? 'line-through text-gray-400' : ''} font-bold">${t.icon} ${t.title}</span>
-            <span class="text-[10px] text-blue-600 font-bold">${t.time}</span>
+            <span class="text-[10px] text-yellow-900 font-bold">${t.time}</span>
           </div>
         `).join('');
       } else {
@@ -1007,7 +998,7 @@
         logBox.innerHTML = dayLogs.map(l => {
           daySum += l.amount;
           return `
-            <div class="flex justify-between items-center p-1.5 bg-blue-50/50 border border-blue-200 rounded-md font-bold text-[11px]">
+            <div class="flex justify-between items-center p-1.5 bg-yellow-50/50 border border-yellow-200 rounded-md font-bold text-[11px]">
               <span>${l.time || ''} ${l.source}</span>
               <span class="${l.amount >= 0 ? 'text-emerald-600' : 'text-red-500'} font-black">${l.amount >= 0 ? '+' : ''}${l.amount}</span>
             </div>
@@ -1026,7 +1017,6 @@
       document.getElementById('stat-today-pts').innerText = `${store.todayPoints >= 0 ? '+' : ''}${store.todayPoints}`;
       document.getElementById('points-tab-today').innerText = `${store.todayPoints >= 0 ? '+' : ''}${store.todayPoints}`;
 
-      // 待办页面仅渲染当天的待办列表
       const todayTodos = store.todos.filter(t => t.date === todayStr);
       const completedCount = todayTodos.filter(t => t.done).length;
       document.getElementById('stat-tasks-total').innerText = todayTodos.length;
@@ -1043,10 +1033,10 @@
       const finBox = document.getElementById('finance-history-list');
       if (store.finances && store.finances.length > 0) {
         finBox.innerHTML = store.finances.map(f => `
-          <div class="flex justify-between items-center p-2.5 bg-white border-2 border-blue-200 rounded-xl font-bold">
+          <div class="flex justify-between items-center p-2.5 bg-white border-2 border-yellow-200 rounded-xl font-bold">
             <div>
               <div class="flex items-center gap-1.5">
-                <span class="text-xs text-blue-900">${f.category}</span>
+                <span class="text-xs text-yellow-950">${f.category}</span>
                 <span class="text-[10px] text-gray-400">📅 ${f.date}</span>
               </div>
               ${f.note ? `<p class="text-[10px] text-gray-500 font-normal">💬 ${f.note}</p>` : ''}
@@ -1068,14 +1058,14 @@
       const sportBox = document.getElementById('sport-history-list');
       if (store.sports && store.sports.length > 0) {
         sportBox.innerHTML = store.sports.map(s => `
-          <div class="p-3 bg-white border-2 border-blue-200 rounded-xl space-y-2 font-bold">
+          <div class="p-3 bg-white border-2 border-yellow-200 rounded-xl space-y-2 font-bold">
             <div class="flex justify-between items-center text-gray-500 text-[10px]">
               <span>📅 ${s.date} | ⏱️ ${s.duration}分钟</span>
               <button onclick="deleteSport(${s.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
             </div>
-            <p class="text-blue-950 text-sm font-extrabold">⚽️ ${s.name}</p>
-            ${s.photo ? `<img src="${s.photo}" class="w-full h-40 object-cover rounded-lg border-2 border-blue-200">` : ''}
-            ${s.comment ? `<p class="text-blue-900 text-xs bg-blue-50/80 p-2 rounded-lg border border-blue-200">💬 ${s.comment}</p>` : ''}
+            <p class="text-yellow-950 text-sm font-extrabold">⚽️ ${s.name}</p>
+            ${s.photo ? `<img src="${s.photo}" class="w-full h-40 object-cover rounded-lg border-2 border-yellow-200">` : ''}
+            ${s.comment ? `<p class="text-yellow-900 text-xs bg-yellow-50/80 p-2 rounded-lg border border-yellow-200">💬 ${s.comment}</p>` : ''}
           </div>
         `).join('');
       } else {
@@ -1085,17 +1075,17 @@
       const movieBox = document.getElementById('movie-history-list');
       if (store.movies && store.movies.length > 0) {
         movieBox.innerHTML = store.movies.map(m => `
-          <div class="p-3 bg-white border-2 border-blue-200 rounded-xl space-y-2 font-bold">
+          <div class="p-3 bg-white border-2 border-yellow-200 rounded-xl space-y-2 font-bold">
             <div class="flex justify-between items-center text-gray-500 text-[10px]">
               <span>📅 ${m.date} | ⏱️ ${m.duration}分钟</span>
               <button onclick="deleteMovie(${m.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
             </div>
             <div class="flex justify-between items-center">
-              <p class="text-blue-950 text-sm font-extrabold">🎬 ${m.name}</p>
+              <p class="text-yellow-950 text-sm font-extrabold">🎬 ${m.name}</p>
               <span class="text-xs">${m.rating}</span>
             </div>
-            ${m.photo ? `<img src="${m.photo}" class="w-full h-44 object-cover rounded-lg border-2 border-blue-200">` : ''}
-            ${m.review ? `<p class="text-blue-900 text-xs bg-blue-50/80 p-2 rounded-lg border border-blue-200">📝 ${m.review}</p>` : ''}
+            ${m.photo ? `<img src="${m.photo}" class="w-full h-44 object-cover rounded-lg border-2 border-yellow-200">` : ''}
+            ${m.review ? `<p class="text-yellow-900 text-xs bg-yellow-50/80 p-2 rounded-lg border border-yellow-200">📝 ${m.review}</p>` : ''}
           </div>
         `).join('');
       } else {
@@ -1105,10 +1095,10 @@
       const pointLogBox = document.getElementById('point-log-list');
       if (store.pointLogs && store.pointLogs.length > 0) {
         pointLogBox.innerHTML = store.pointLogs.map(log => `
-          <div class="flex justify-between items-center p-2 bg-blue-50/60 rounded-lg border-2 border-blue-200 font-bold">
+          <div class="flex justify-between items-center p-2 bg-yellow-50/60 rounded-lg border-2 border-yellow-200 font-bold">
             <div class="flex items-center gap-1.5 overflow-hidden">
-              <span class="text-blue-400 text-[10px]">${log.date || ''} ${log.time || ''}</span>
-              <span class="truncate text-blue-950">${log.source}</span>
+              <span class="text-amber-600 text-[10px]">${log.date || ''} ${log.time || ''}</span>
+              <span class="truncate text-yellow-950">${log.source}</span>
             </div>
             <div class="flex items-center gap-2">
               <span class="${log.amount >= 0 ? 'text-emerald-600' : 'text-red-500'} font-black">
@@ -1125,69 +1115,67 @@
       const diaryBox = document.getElementById('diary-history');
       if (store.diaries && store.diaries.length > 0) {
         diaryBox.innerHTML = store.diaries.map(d => `
-          <div class="p-3 bg-white border-2 border-blue-200 rounded-xl space-y-1 font-bold">
+          <div class="p-3 bg-white border-2 border-yellow-200 rounded-xl space-y-1 font-bold">
             <div class="flex justify-between items-center text-gray-500 text-[10px]">
               <span>📅 ${d.date} | ${d.mood} | ${d.weather}</span>
               <button onclick="deleteDiary(${d.id})" class="text-gray-300 hover:text-red-500 text-sm">×</button>
             </div>
-            <p class="text-blue-950 text-xs leading-relaxed">${d.content}</p>
+            <p class="text-yellow-950 text-xs leading-relaxed">${d.content}</p>
           </div>
         `).join('');
       } else {
         diaryBox.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">还没有日记，快去写下第一篇吧！</p>';
       }
 
-      // 渲染今日象限
       for (let i = 1; i <= 4; i++) {
         const quadBox = document.getElementById(`quad-${i}`);
         const items = todayTodos.filter(t => t.quad === i);
         quadBox.innerHTML = items.map(t => `
-          <div class="bg-white p-2 rounded-lg border-2 border-blue-200 space-y-1">
+          <div class="bg-white p-2 rounded-lg border-2 border-yellow-200 space-y-1">
             <div class="flex items-center justify-between">
               <span class="font-bold flex items-center gap-1">
-                <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#3157A4]">
+                <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#EAB308]">
                 <span class="${t.done ? 'line-through text-gray-400' : ''}">${t.icon} ${t.title}</span>
               </span>
               <button onclick="deleteTodo(${t.id})" class="text-gray-300 hover:text-red-500 font-bold">×</button>
             </div>
             <div class="flex justify-between text-[10px] text-gray-400 font-bold">
               <span>⏰ ${t.time}</span>
-              <span class="text-blue-600">+${t.pts}pt</span>
+              <span class="text-amber-600">+${t.pts}pt</span>
             </div>
           </div>
         `).join('') || '<p class="text-[10px] text-gray-400 italic">暂无事项</p>';
       }
 
-      // 渲染今日时间轴
       const timelineBox = document.getElementById('timeline-list');
       timelineBox.innerHTML = todayTodos.length > 0 ? todayTodos.map(t => `
-        <div class="flex items-center gap-2 p-2.5 bg-white border-2 border-blue-200 rounded-xl">
-          <span class="bg-blue-50 text-blue-800 px-2 py-0.5 rounded-md border border-blue-200 font-black text-[10px]">${t.time}</span>
-          <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#3157A4]">
+        <div class="flex items-center gap-2 p-2.5 bg-white border-2 border-yellow-200 rounded-xl">
+          <span class="bg-yellow-50 text-yellow-900 px-2 py-0.5 rounded-md border border-yellow-200 font-black text-[10px]">${t.time}</span>
+          <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id})" class="accent-[#EAB308]">
           <span class="flex-1 font-bold ${t.done ? 'line-through text-gray-400' : ''}">${t.icon} ${t.title}</span>
-          <span class="text-xs font-black text-blue-600">+${t.pts}</span>
+          <span class="text-xs font-black text-amber-600">+${t.pts}</span>
           <button onclick="deleteTodo(${t.id})" class="text-gray-300 hover:text-red-500 font-bold ml-1">×</button>
         </div>
       `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">暂无待办事项</p>';
 
       document.getElementById('study-history').innerHTML = store.studies.length > 0 ? store.studies.map(s => `
-        <div class="flex justify-between items-center p-2.5 bg-white border-2 border-blue-200 rounded-xl font-bold">
+        <div class="flex justify-between items-center p-2.5 bg-white border-2 border-yellow-200 rounded-xl font-bold">
           <span>${s.icon} ${s.subject} (${s.time}分钟)</span>
           <div class="flex items-center gap-2">
-            <span class="text-[#3157A4]">+${s.pts} 分</span>
+            <span class="text-amber-700">+${s.pts} 分</span>
             <button onclick="deleteStudy(${s.id})" class="text-gray-300 hover:text-red-500">×</button>
           </div>
         </div>
       `).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">今天还没有专注记录</p>';
 
       document.getElementById('habit-list').innerHTML = store.habits.length > 0 ? store.habits.map(h => `
-        <div class="flex justify-between items-center p-2.5 bg-white border-2 border-blue-200 rounded-xl font-bold">
+        <div class="flex justify-between items-center p-2.5 bg-white border-2 border-yellow-200 rounded-xl font-bold">
           <div class="flex items-center gap-2">
             <span>${h.icon}</span>
             <span class="${h.done ? 'line-through text-gray-400' : ''}">${h.name}</span>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="toggleHabit(${h.id})" class="cartoon-btn px-3 py-1 text-xs ${h.done ? 'bg-emerald-600 border-emerald-800' : ''}">
+            <button onclick="toggleHabit(${h.id})" class="cartoon-btn px-3 py-1 text-xs ${h.done ? 'bg-emerald-600 border-emerald-800 text-white' : ''}">
               ${h.done ? '已打卡 √' : '+10分 打卡'}
             </button>
             <button onclick="deleteHabit(${h.id})" class="text-gray-300 hover:text-red-500">×</button>
@@ -1198,16 +1186,16 @@
       document.getElementById('book-list').innerHTML = store.books.length > 0 ? store.books.map(b => {
         const percent = Math.min(100, Math.round((b.read / b.total) * 100)) || 0;
         return `
-          <div class="p-3 bg-white border-2 border-blue-200 rounded-xl space-y-1.5 font-bold">
+          <div class="p-3 bg-white border-2 border-yellow-200 rounded-xl space-y-1.5 font-bold">
             <div class="flex justify-between items-center">
               <span>${b.icon} ${b.title}</span>
               <div class="flex items-center gap-2">
-                <span class="text-[#3157A4]">${percent}%</span>
+                <span class="text-amber-700">${percent}%</span>
                 <button onclick="deleteBook(${b.id})" class="text-gray-300 hover:text-red-500">×</button>
               </div>
             </div>
-            <div class="w-full bg-blue-50 h-3 rounded-full border border-blue-200 overflow-hidden">
-              <div class="bg-[#3157A4] h-full" style="width: ${percent}%"></div>
+            <div class="w-full bg-yellow-50 h-3 rounded-full border border-yellow-200 overflow-hidden">
+              <div class="bg-[#EAB308] h-full" style="width: ${percent}%"></div>
             </div>
             <p class="text-[10px] text-gray-500">已读 ${b.read} / ${b.total} 页</p>
           </div>
@@ -1215,12 +1203,12 @@
       }).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">书架空空如也</p>';
 
       document.getElementById('reward-cards').innerHTML = store.rewards.length > 0 ? store.rewards.map(r => `
-        <div class="cartoon-card p-3 flex flex-col justify-between text-center space-y-2 relative border-blue-200">
+        <div class="cartoon-card p-3 flex flex-col justify-between text-center space-y-2 relative border-yellow-200">
           <button onclick="deleteReward(${r.id})" class="absolute top-1 right-2 text-gray-300 hover:text-red-500 font-bold text-sm">×</button>
           <div>
             <div class="text-3xl my-1">${r.icon}</div>
-            <p class="font-extrabold text-blue-950">${r.name}</p>
-            <p class="text-xs font-black text-amber-500 mt-0.5">⭐️ ${r.cost} pts</p>
+            <p class="font-extrabold text-yellow-950">${r.name}</p>
+            <p class="text-xs font-black text-amber-600 mt-0.5">⭐️ ${r.cost} pts</p>
           </div>
           <button onclick="redeemReward(${r.cost}, '${r.name}')" class="cartoon-btn py-1 text-xs">兑换</button>
         </div>
